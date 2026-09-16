@@ -1,0 +1,41 @@
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+
+body { background: #0d1117; color: #e6edf3; line-height: 1.6; }
+
+/* Header */
+header { position: sticky; top: 0; background: #161b22; padding: 1rem 2rem; z-index: 100; border-bottom: 1px solid #30363d; }
+nav { display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: auto; }
+.logo { color: #58a6ff; }
+nav ul { display: flex; gap: 1.5rem; list-style: none; }
+nav a { color: #e6edf3; text-decoration: none; transition: 0.3s; }
+nav a:hover { color: #58a6ff; }
+
+/* Hero */
+.hero { text-align: center; padding: 5rem 2rem; }
+.hero h2 { font-size: 2.5rem; margin-bottom: 1rem; }
+.hero h2 span { color: #58a6ff; }
+.hero p { font-size: 1.2rem; color: #8b949e; margin-bottom: 2rem; }
+.btn { display: inline-block; background: #58a6ff; color: #0d1117; padding: 0.8rem 2rem; border-radius: 8px; text-decoration: none; font-weight: 600; transition: 0.3s; }
+.btn:hover { background: #79c0ff; transform: translateY(-2px); }
+
+/* Sections */
+section { max-width: 1000px; margin: auto; padding: 4rem 2rem; }
+section h2 { font-size: 2rem; margin-bottom: 1.5rem; color: #58a6ff; text-align: center; }
+
+/* Skills */
+.skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; }
+.skill { background: #161b22; border: 1px solid #30363d; padding: 1rem; text-align: center; border-radius: 8px; transition: 0.3s; }
+.skill:hover { border-color: #58a6ff; transform: translateY(-3px); }
+
+/* Projects */
+.projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+.project { background: #161b22; border: 1px solid #30363d; padding: 1.5rem; border-radius: 10px; transition: 0.3s; }
+.project:hover { border-color: #58a6ff; transform: translateY(-5px); }
+.project h3 { color: #58a6ff; margin-bottom: 0.5rem; }
+.project a { color: #79c0ff; text-decoration: none; margin-right: 1rem; }
+
+/* Contact */
+#contact { text-align: center; }
+#contact a { color: #79c0ff; text-decoration: none; }
+
+footer { text-align: center; padding: 2rem; color: #8b949e; border-top: 1px solid #30363d; }
