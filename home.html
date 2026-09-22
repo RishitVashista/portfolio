@@ -1,0 +1,1759 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduTrack AI - Career Point Hamirpur (CSE)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; }
+    .card { transition: all 0.3s ease; }
+    .card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+    .modal-bg { background: rgba(0,0,0,0.85); backdrop-filter: blur(6px); }
+    video { border-radius: 12px; }
+    .selfie-preview { border: 4px solid #10b981; border-radius: 12px; }
+    .nav-btn { transition: all 0.2s ease; }
+    .nav-btn:hover { transform: translateY(-2px); }
+    .nav-btn.active { background: #1e40af !important; color: white !important; }
+    .dropdown-menu { animation: fadeIn 0.15s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+    .hero-gradient { background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #6366f1 100%); }
+    .stat-card { transition: all 0.3s ease; }
+    .stat-card:hover { transform: scale(1.03); }
+    .pulse-dot { animation: pulse 2s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+    .activity-item { animation: slideIn 0.3s ease; }
+    @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+    .teacher-card { cursor: pointer; }
+    .teacher-card:hover { border-color: #3b82f6 !important; }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 to-blue-50 min-h-screen">
+
+<!-- MAIN APP -->
+<div id="mainApp">
+
+<!-- NAV BAR -->
+<div class="bg-white shadow-lg sticky top-0 z-40">
+  <div class="max-w-7xl mx-auto px-4 py-3">
+    <div class="flex justify-between items-center flex-wrap gap-3 mb-3">
+      <div class="flex items-center gap-3">
+        <div class="text-3xl">🎓</div>
+        <div>
+          <div class="font-bold text-slate-800 text-lg">EduTrack AI</div>
+          <div class="text-xs text-slate-500">Career Point Hamirpur · CSE</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 flex-wrap">
+        <span id="loggedInUser" class="bg-green-100 text-green-700 px-3 py-1.5 rounded-lg text-xs font-semibold"></span>
+        <button onclick="logout()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-1.5 rounded-lg text-xs font-semibold">🚪 Logout</button>
+      </div>
+    </div>
+
+    <div class="flex gap-2 flex-wrap relative">
+      <button onclick="backToHome()" id="btn-home" class="nav-btn min-w-[80px] bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 border-2 border-slate-200">
+        <span class="text-xl">🏠</span><span class="hidden md:inline">Home</span>
+      </button>
+      <button onclick="window.location.href='hod.html'" id="btn-hod" class="nav-btn flex-1 min-w-[140px] bg-blue-100 hover:bg-blue-200 text-blue-800 font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 border-2 border-blue-200">
+        <span class="text-xl">👔</span><span>HOD</span>
+      </button>
+
+      <button onclick="openRolePanel('dean')" id="btn-dean" class="nav-btn flex-1 min-w-[140px] bg-purple-100 hover:bg-purple-200 text-purple-800 font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 border-2 border-purple-200">
+        <span class="text-xl">🎯</span><span>Dean</span>
+      </button>
+
+      <div class="flex-1 min-w-[140px] relative">
+        <button onclick="toggleTeacherDropdown(event)" id="btn-teachers" class="nav-btn w-full bg-green-100 hover:bg-green-200 text-green-800 font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 border-2 border-green-200">
+          <span class="text-xl">👨‍🏫</span>
+          <span id="teacherCountLabel">Teachers</span>
+          <span id="teacherArrow" class="text-xs">▼</span>
+        </button>
+        <div id="teacherDropdown" class="hidden dropdown-menu absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border-2 border-green-200 z-50 max-h-96 overflow-y-auto">
+          <div class="p-2 bg-green-50 border-b-2 border-green-200 rounded-t-xl sticky top-0">
+            <div class="text-xs font-bold text-green-800 px-2">Click Any Teacher → Open Attendance</div>
+          </div>
+          <div id="teacherList" class="p-1"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div id="contentArea" class="max-w-7xl mx-auto p-4">
+
+  <!-- HOME -->
+  <div id="welcomeScreen" class="fade-in">
+    <div class="hero-gradient rounded-2xl shadow-2xl overflow-hidden mb-6">
+      <div class="p-6 md:p-10 text-white relative">
+        <div class="absolute top-0 right-0 opacity-10 text-[180px] leading-none font-bold select-none">💻</div>
+        <div class="relative z-10">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="w-2 h-2 bg-green-400 rounded-full pulse-dot"></span>
+            <span class="text-xs font-semibold bg-white bg-opacity-20 px-3 py-1 rounded-full">CSE DEPARTMENT · LIVE</span>
+          </div>
+          <h1 class="text-2xl md:text-4xl font-bold mb-2">Welcome, <span id="welcomeName">Teacher</span>! 👋</h1>
+          <p class="text-sm md:text-base text-blue-100 max-w-2xl mb-5">Apni class select karo, selfie lo, aur attendance mark karo.</p>
+          <button onclick="toggleTeacherDropdown(event)" class="bg-white text-blue-800 hover:bg-blue-50 px-6 py-3 rounded-xl font-bold shadow-lg">👨‍🏫 Click Here → Select Your Name</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-6">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-lg font-bold text-slate-800">📊 Today's Live Stats</h2>
+        <span class="text-xs text-slate-500 flex items-center gap-1">
+          <span class="w-2 h-2 bg-green-500 rounded-full pulse-dot"></span>
+          <span id="statsUpdateTime">Live</span>
+        </span>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="stat-card bg-gradient-to-br from-green-500 to-green-600 text-white rounded-2xl p-5 shadow-lg">
+          <div class="flex justify-between items-start mb-2"><div class="text-3xl">✅</div><div class="text-xs bg-white bg-opacity-25 px-2 py-0.5 rounded-full font-bold">TODAY</div></div>
+          <div class="text-4xl font-bold mb-1" id="heroStatFull">0</div>
+          <div class="text-sm opacity-90">Fully Marked</div>
+        </div>
+        <div class="stat-card bg-gradient-to-br from-amber-500 to-orange-500 text-white rounded-2xl p-5 shadow-lg">
+          <div class="flex justify-between items-start mb-2"><div class="text-3xl">⚠️</div><div class="text-xs bg-white bg-opacity-25 px-2 py-0.5 rounded-full font-bold">TODAY</div></div>
+          <div class="text-4xl font-bold mb-1" id="heroStatPartial">0</div>
+          <div class="text-sm opacity-90">Partial</div>
+        </div>
+        <div class="stat-card bg-gradient-to-br from-red-500 to-pink-500 text-white rounded-2xl p-5 shadow-lg">
+          <div class="flex justify-between items-start mb-2"><div class="text-3xl">❌</div><div class="text-xs bg-white bg-opacity-25 px-2 py-0.5 rounded-full font-bold">TODAY</div></div>
+          <div class="text-4xl font-bold mb-1" id="heroStatAbsent">0</div>
+          <div class="text-sm opacity-90">Not Marked</div>
+        </div>
+        <div class="stat-card bg-gradient-to-br from-blue-500 to-indigo-600 text-white rounded-2xl p-5 shadow-lg">
+          <div class="flex justify-between items-start mb-2"><div class="text-3xl">👥</div><div class="text-xs bg-white bg-opacity-25 px-2 py-0.5 rounded-full font-bold">STUDENTS</div></div>
+          <div class="text-4xl font-bold mb-1" id="heroStatStudents">0</div>
+          <div class="text-sm opacity-90" id="heroStatStudentsLabel">of 900 present</div>
+          <div class="text-xs opacity-95 mt-1 font-semibold" id="heroStatStudentsAbsent">❌ Absent: 900</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
+      <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+        <h2 class="text-lg font-bold text-slate-800">📸 Teachers — Today's Reports</h2>
+        <span class="text-xs text-slate-500">Click a teacher card to open attendance</span>
+      </div>
+      <div id="teacherReportsGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3"></div>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-lg font-bold text-slate-800">🔔 Recent Activity</h2>
+        <span class="text-xs text-slate-500">Today</span>
+      </div>
+      <div id="activityFeed" class="space-y-3 max-h-[340px] overflow-y-auto pr-1"></div>
+    </div>
+  </div>
+
+  <!-- TEACHER DASHBOARD -->
+  <div id="teacherDashboard" class="hidden">
+    <div class="bg-white rounded-2xl shadow-lg p-5 mb-4 flex justify-between items-center flex-wrap gap-3">
+      <div>
+        <h1 class="text-2xl font-bold text-slate-800">Teacher Dashboard</h1>
+        <p id="teacherNameHeader" class="text-slate-500 text-sm"></p>
+        <button onclick="openTimetable()" class="mt-2 bg-purple-600 hover:bg-purple-700 text-white text-xs px-3 py-1.5 rounded-lg font-bold">📅 View My Full Timetable</button>
+        <p id="teacherClassCount" class="text-blue-600 text-xs mt-1"></p>
+      </div>
+      <div class="flex gap-2 items-center">
+        <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-lg text-sm font-semibold" id="todayDate"></span>
+      </div>
+    </div>
+    <div class="bg-white rounded-2xl shadow-lg p-5">
+      <h2 class="text-lg font-bold text-slate-800 mb-1">Today's Classes</h2>
+      <p class="text-xs text-slate-500 mb-4">Click a class → take selfie → mark attendance</p>
+      <div id="teacherClasses" class="space-y-3"></div>
+    </div>
+  </div>
+
+  <!-- HOD DASHBOARD (in-page) -->
+  <div id="hodDashboard" class="hidden">
+    <div class="bg-white rounded-2xl shadow-lg p-5 mb-4 flex justify-between items-center flex-wrap gap-3">
+      <div>
+        <h1 class="text-2xl font-bold text-slate-800">HOD Dashboard</h1>
+        <p id="hodNameHeader" class="text-slate-500 text-sm"></p>
+      </div>
+      <div class="flex gap-2 items-center">
+        <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-lg text-sm font-semibold" id="hodDate"></span>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+      <div class="stat-card bg-gradient-to-br from-green-500 to-green-600 text-white rounded-xl p-4 text-center"><div class="text-3xl font-bold" id="hodStatPresent">0</div><div class="text-sm">Fully Marked</div></div>
+      <div class="stat-card bg-gradient-to-br from-amber-500 to-orange-500 text-white rounded-xl p-4 text-center"><div class="text-3xl font-bold" id="hodStatPartial">0</div><div class="text-sm">Partial</div></div>
+      <div class="stat-card bg-gradient-to-br from-red-500 to-pink-500 text-white rounded-xl p-4 text-center"><div class="text-3xl font-bold" id="hodStatAbsent">0</div><div class="text-sm">Not Marked</div></div>
+      <div class="stat-card bg-gradient-to-br from-blue-500 to-indigo-600 text-white rounded-xl p-4 text-center"><div class="text-3xl font-bold" id="hodStatTotal">0</div><div class="text-sm">Teachers</div></div>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-4 mb-4">
+      <div class="bg-white rounded-2xl shadow-lg p-5">
+        <h3 class="text-md font-bold text-slate-800 mb-3">🔔 Recent Activity</h3>
+        <div id="hodActivityFeed" class="space-y-2 max-h-[280px] overflow-y-auto pr-1"></div>
+      </div>
+      <div class="bg-white rounded-2xl shadow-lg p-5">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-md font-bold text-slate-800">⚠️ Attention Needed</h3>
+          <span class="text-xs text-red-600 font-semibold" id="hodAlertCount">0 alerts</span>
+        </div>
+        <div id="hodAlertFeed" class="space-y-2 max-h-[280px] overflow-y-auto pr-1"></div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-lg p-5">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-lg font-bold text-slate-800">👨‍🏫 All Teachers</h2>
+        <span class="text-xs text-slate-500" id="hodTeacherCount">0 teachers</span>
+      </div>
+      <div id="hodTeacherList" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+    </div>
+  </div>
+
+  <!-- DEAN DASHBOARD -->
+  <div id="deanDashboard" class="hidden">
+    <div class="bg-white rounded-2xl shadow-lg p-5 mb-4 flex justify-between items-center flex-wrap gap-3">
+      <div>
+        <h1 class="text-2xl font-bold text-slate-800">Dean Dashboard</h1>
+        <p id="deanNameHeader" class="text-slate-500 text-sm"></p>
+      </div>
+      <div class="flex gap-2 items-center">
+        <button onclick="downloadDeanReport()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-semibold">Download Report</button>
+        <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-lg text-sm font-semibold" id="deanDate"></span>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+      <div class="stat-card bg-gradient-to-br from-green-500 to-green-600 text-white rounded-xl p-4 text-center"><div class="text-3xl font-bold" id="deanStatPresent">0</div><div class="text-sm">Fully Marked</div></div>
+      <div class="stat-card bg-gradient-to-br from-amber-500 to-orange-500 text-white rounded-xl p-4 text-center"><div class="text-3xl font-bold" id="deanStatPartial">0</div><div class="text-sm">Partial</div></div>
+      <div class="stat-card bg-gradient-to-br from-red-500 to-pink-500 text-white rounded-xl p-4 text-center"><div class="text-3xl font-bold" id="deanStatAbsent">0</div><div class="text-sm">Not Marked</div></div>
+      <div class="stat-card bg-gradient-to-br from-blue-500 to-indigo-600 text-white rounded-xl p-4 text-center"><div class="text-3xl font-bold" id="deanStatTotal">0</div><div class="text-sm">Total Teachers</div></div>
+    </div>
+    <div class="bg-white rounded-2xl shadow-lg p-5">
+      <h2 class="text-lg font-bold text-slate-800 mb-4">All Teachers — Today's Status</h2>
+      <div id="deanTeacherList" class="grid md:grid-cols-2 gap-3"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- SELFIE MODAL -->
+<div id="selfieModal" class="hidden fixed inset-0 modal-bg z-50 flex items-center justify-center p-4 overflow-y-auto">
+  <div class="bg-white rounded-2xl p-5 w-full max-w-2xl my-4">
+    <div class="flex justify-between items-center mb-3">
+      <div><h3 class="text-lg font-bold text-slate-800" id="selfieTitle">Class</h3><p class="text-xs text-slate-500" id="selfieInfo"></p></div>
+      <button onclick="closeSelfie()" class="text-slate-400 hover:text-red-500 text-2xl font-bold">✕</button>
+    </div>
+    <div class="grid grid-cols-2 gap-2 mb-3">
+      <div class="bg-blue-50 rounded-lg p-2 text-xs"><div class="text-slate-500 font-semibold">Date</div><div id="selfieDate" class="text-slate-800 font-bold">--</div></div>
+      <div class="bg-blue-50 rounded-lg p-2 text-xs"><div class="text-slate-500 font-semibold">Time</div><div id="selfieTime" class="text-slate-800 font-bold">--</div></div>
+    </div>
+    <div id="cameraArea" class="bg-slate-900 rounded-xl overflow-hidden mb-3 relative" style="aspect-ratio: 16/10;">
+      <video id="video" autoplay playsinline muted class="w-full h-full object-cover"></video>
+      <div class="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full flex items-center gap-1"><span class="w-2 h-2 bg-white rounded-full animate-pulse"></span> LIVE</div>
+      <div class="absolute bottom-2 left-2 right-2 bg-black bg-opacity-60 text-white text-xs p-2 rounded">📸 Take selfie with students in the frame</div>
+    </div>
+    <div id="previewArea" class="hidden mb-3">
+      <img id="capturedPhoto" class="w-full selfie-preview">
+      <p class="text-xs text-center text-green-700 font-semibold mt-2">✓ Photo captured — check below &amp; confirm</p>
+    </div>
+    <div id="checkDoneSection" class="hidden mb-3 p-4 bg-yellow-50 border-2 border-yellow-400 rounded-xl">
+      <div class="font-bold text-slate-800 mb-2 text-center">📋 Check Your Photo</div>
+      <p class="text-xs text-slate-600 mb-3 text-center">Photo theek hai? Agar haan toh Done dabao, warna Retake karo.</p>
+      <div class="flex gap-2">
+        <button onclick="retakePhoto()" class="flex-1 bg-red-500 hover:bg-red-600 text-white py-3 rounded-lg font-bold">🔄 Retake</button>
+        <button onclick="donePhoto()" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-bold">✓ Done — Photo OK</button>
+      </div>
+    </div>
+    <canvas id="canvas" class="hidden"></canvas>
+    <div id="studentCountSection" class="hidden bg-slate-50 rounded-xl p-4 mb-3">
+      <div class="font-bold text-slate-800 mb-3 text-sm">👥 Student Attendance</div>
+      <div class="grid grid-cols-2 gap-3">
+        <div><label class="text-xs text-slate-600 font-semibold">Total</label><input id="totalStudents" type="number" min="1" class="w-full mt-1 p-2 border-2 border-amber-400 rounded-lg bg-amber-50 font-bold text-slate-800 focus:border-amber-600 outline-none"></div>
+        <div><label class="text-xs text-slate-600 font-semibold">Present</label><input id="presentStudents" type="number" min="0" placeholder="Enter count" class="w-full mt-1 p-2 border-2 border-blue-400 rounded-lg font-bold text-blue-700 focus:border-blue-600 outline-none"></div>
+      </div>
+      <div id="absentInfo" class="mt-2 text-xs text-slate-500"></div>
+    </div>
+    <div class="flex gap-2">
+      <button onclick="closeSelfie()" class="flex-1 bg-slate-300 hover:bg-slate-400 text-slate-800 py-3 rounded-lg font-semibold">Cancel</button>
+      <button id="captureBtn" onclick="capturePhoto()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-bold">📸 Capture Photo</button>
+      <button id="saveBtn" onclick="saveAttendance()" class="hidden flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-bold">✓ Save Attendance</button>
+    </div>
+  </div>
+</div>
+
+<!-- PHOTO VIEW MODAL -->
+<div id="photoModal" class="hidden fixed inset-0 modal-bg z-50 flex items-center justify-center p-4" onclick="closePhoto()">
+  <div class="bg-white rounded-2xl p-5 max-w-lg w-full" onclick="event.stopPropagation()">
+    <img id="viewPhoto" class="rounded-xl w-full mb-3">
+    <div id="viewPhotoInfo" class="text-sm text-slate-600 space-y-1"></div>
+    <button onclick="closePhoto()" class="w-full mt-3 bg-slate-700 text-white py-2 rounded-lg">Close</button>
+  </div>
+</div>
+
+<!-- HISTORY MODAL -->
+<div id="historyModal" class="hidden fixed inset-0 modal-bg z-50 flex items-center justify-center p-4 overflow-y-auto" onclick="closeHistory()">
+  <div class="bg-white rounded-2xl p-5 w-full max-w-4xl my-4" onclick="event.stopPropagation()">
+    <div class="flex justify-between items-start mb-4 flex-wrap gap-3">
+      <div class="flex items-center gap-3">
+        <div class="bg-gradient-to-br from-blue-500 to-purple-600 text-white w-14 h-14 rounded-full flex items-center justify-center text-2xl font-bold" id="teacherAvatar">R</div>
+        <div><h3 class="text-xl font-bold text-slate-800" id="historyTitle">Teacher</h3><p class="text-xs text-slate-500" id="historySubtitle"></p></div>
+      </div>
+      <button onclick="closeHistory()" class="text-slate-400 hover:text-red-500 text-3xl font-bold leading-none">✕</button>
+    </div>
+    <div id="historySummary" class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4"></div>
+    <div class="mb-2 flex justify-between items-center"><h4 class="font-bold text-slate-800">📅 Last 5 Days</h4><span class="text-xs text-slate-500">Click photo to view</span></div>
+    <div id="historyContent" class="space-y-3 max-h-[55vh] overflow-y-auto pr-1"></div>
+  </div>
+</div>
+
+</div>
+
+<script>
+const CLASS_STRENGTH = {
+  'B.Tech CSE 7th': 60, 'B.Tech CSE 5th': 60, 'B.Tech CSE 3rd A': 60, 'B.Tech CSE 3rd B': 60,
+  'B.Tech CSE 1st A': 60, 'B.Tech CSE 1st B': 60,
+  'BCA 5th A': 55, 'BCA 5th B': 55, 'BCA 5th C': 55,
+  'BCA 3rd A': 50, 'BCA 3rd B': 50, 'BCA 1st A': 50, 'BCA 1st B': 50,
+  'MCA 3rd': 40, 'MCA 1st': 45, 'MSC IT 1st': 40,
+  'B.SC IT 5th': 45, 'B.SC CS 5th': 45,
+  'BCA 5th C/BSCIT/BSCCS': 55, 'BCA + MCA 5th': 55
+};
+const DEPT_TOTAL_STUDENTS = 900;
+
+const TEACHERS = [
+  { id:'pratibha', name:'Dr. Pratibha',       email:'pratibha@cp.com', password:'123', subject:'B.Tech 7th',   dept:'CSE' },
+  { id:'krishma',  name:'Ms. Krishma Patiyal',email:'krishma@cp.com',  password:'123', subject:'B.Tech 5th',   dept:'CSE' },
+  { id:'anshul',   name:'Mr. Anshul',         email:'anshul@cp.com',   password:'123', subject:'B.Tech 3rd A', dept:'CSE' },
+  { id:'chandan',  name:'Dr. Chandan',        email:'chandan@cp.com',  password:'123', subject:'B.Tech 3rd B', dept:'CSE' },
+  { id:'neha',     name:'Dr. Neha',           email:'neha@cp.com',     password:'123', subject:'B.Tech 1st A', dept:'CSE' },
+  { id:'monika',   name:'Ms. Monika',         email:'monika@cp.com',   password:'123', subject:'B.Tech 1st B', dept:'CSE' },
+  { id:'vinod',    name:'Mr. Vinod',          email:'vinod@cp.com',    password:'123', subject:'BCA 5th A',    dept:'CSE' },
+  { id:'shiva',    name:'Ms. Shiva',          email:'shiva@cp.com',    password:'123', subject:'BCA 5th B',    dept:'CSE' },
+  { id:'ravinder', name:'Mr. Ravinder',       email:'ravinder@cp.com', password:'123', subject:'BCA 5th C',    dept:'CSE' },
+  { id:'ankit',    name:'Mr. Ankit',          email:'ankit@cp.com',    password:'123', subject:'BCA 3rd A',    dept:'CSE' },
+  { id:'raman',    name:'Mr. Raman',          email:'raman@cp.com',    password:'123', subject:'BCA 3rd B',    dept:'CSE' },
+  { id:'kushal',   name:'Mr. Kushal',         email:'kushal@cp.com',   password:'123', subject:'BCA 1st A',    dept:'CSE' },
+  { id:'nf2',      name:'NF2',                email:'nf2@cp.com',      password:'123', subject:'BCA 1st B',    dept:'CSE' },
+  { id:'gandharv', name:'Mr. Gandhrav',       email:'gandharv@cp.com', password:'123', subject:'MCA 3rd',      dept:'CSE' },
+  { id:'nitesh',   name:'Mr. Nitesh',         email:'nitesh@cp.com',   password:'123', subject:'MCA 1st',      dept:'CSE' }
+];
+
+const HODS = [{ id:'hod_cse', name:'Dr. CSE Head', email:'hod.cse@cp.com', password:'123', dept:'CSE' }];
+const DEANS = [{ id:'dean1', name:'Prof. V.K. Singh', email:'dean@cp.com', password:'123' }];
+
+let TIMETABLE = [];
+const PRATIBHA_TIMETABLE = [
+  { day:1, start:'09:15', end:'10:05', class:'BCA 5th C/BSCIT/BSCCS', subject:'CA251/271/643', room:'608' },
+  { day:1, start:'10:05', end:'10:55', class:'MSC IT 1st', subject:'CA502/512', room:'604' },
+  { day:1, start:'11:45', end:'12:35', class:'BCA 5th A', subject:'CA251', room:'606' },
+  { day:1, start:'13:25', end:'14:15', class:'BCA 5th B', subject:'CA251', room:'609' },
+  { day:2, start:'09:15', end:'10:05', class:'BCA 5th A', subject:'CA251', room:'608' },
+  { day:2, start:'10:05', end:'10:55', class:'B.Tech CSE 7th', subject:'CS405', room:'608' },
+  { day:2, start:'11:45', end:'12:35', class:'BCA 5th C/BSCIT/BSCCS', subject:'CA251/271/643', room:'612A' },
+  { day:2, start:'13:25', end:'14:15', class:'BCA 5th B', subject:'CA251', room:'609' },
+  { day:2, start:'14:15', end:'15:05', class:'MCA 1st', subject:'CA502/512', room:'604' },
+  { day:3, start:'09:15', end:'10:05', class:'BCA 5th B', subject:'CA251', room:'709' },
+  { day:3, start:'10:05', end:'10:55', class:'MCA 1st', subject:'CA502/512', room:'604' },
+  { day:4, start:'09:15', end:'10:05', class:'BCA 5th A', subject:'CA251', room:'610B' },
+  { day:4, start:'11:45', end:'12:35', class:'BCA 5th C/BSCIT/BSCCS', subject:'CA251/271/643', room:'612A' },
+  { day:4, start:'13:25', end:'14:15', class:'B.Tech CSE 7th', subject:'CS405', room:'604' },
+  { day:5, start:'10:05', end:'10:55', class:'MCA 1st', subject:'CA502/512', room:'604' },
+  { day:6, start:'09:15', end:'10:05', class:'MCA 1st', subject:'CA502/512', room:'604' },
+  { day:6, start:'13:25', end:'14:15', class:'B.Tech CSE 7th', subject:'CS405', room:'606' }
+];
+PRATIBHA_TIMETABLE.forEach(c => TIMETABLE.push(Object.assign({ teacherId:'pratibha' }, c)));
+
+(function generateDefaultTimetable(){
+  const slots = [
+    { start:'09:15', end:'10:05' }, { start:'10:05', end:'10:55' }, { start:'10:55', end:'11:45' },
+    { start:'11:45', end:'12:35' }, { start:'13:25', end:'14:15' }, { start:'14:15', end:'15:05' }
+  ];
+  const classList = ['B.Tech CSE 7th','B.Tech CSE 5th','B.Tech CSE 3rd A','B.Tech CSE 3rd B','B.Tech CSE 1st A','B.Tech CSE 1st B','BCA 5th A','BCA 5th B','BCA 3rd A','MCA 3rd','MCA 1st'];
+  const subjects = ['Data Structures','DBMS','OS','Networks','ML','Web Dev','Python','Java','C Programming','Algorithms'];
+  TEACHERS.forEach((t, ti) => {
+    if (t.id === 'pratibha') return;
+    for (let day = 1; day <= 6; day++) {
+      const count = 1 + ((ti + day) % 3);
+      for (let c = 0; c < count; c++) {
+        const slot = slots[(ti + day + c) % slots.length];
+        TIMETABLE.push({
+          teacherId: t.id, day: day, start: slot.start, end: slot.end,
+          class: classList[(ti + c) % classList.length],
+          subject: subjects[(ti + c) % subjects.length],
+          room: 'CS-' + (100 + (ti % 5))
+        });
+      }
+    }
+  });
+})();
+
+let currentUser = null;
+let activeClass = null;
+let capturedPhotoData = null;
+let cameraStream = null;
+let attendance = {};
+try { attendance = JSON.parse(localStorage.getItem('attendance_v8') || '{}'); } catch(e){ attendance = {}; }
+
+const today = new Date().toISOString().split('T')[0];
+const todayDay = new Date().getDay();
+
+function saveSession(user){ try{ localStorage.setItem('edutrack_session', JSON.stringify({ role: user.role, id: user.id })); }catch(e){} }
+function clearSession(){ try{ localStorage.removeItem('edutrack_session'); }catch(e){} }
+function loadSession(){ try{ const s = localStorage.getItem('edutrack_session'); if(!s) return null; return JSON.parse(s); }catch(e){ return null; } }
+
+function formatDate(d){ return d.toLocaleDateString('en-IN', { weekday:'short', day:'2-digit', month:'short', year:'numeric' }); }
+function formatTime(d){ return d.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit', hour12:true }); }
+function getDayName(d){ return ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][d]; }
+function initials(name){ return name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase(); }
+
+function getTodayClassesFor(teacherId){
+  let list = TIMETABLE.filter(t => t.teacherId === teacherId && t.day === todayDay);
+  if (list.length === 0) list = TIMETABLE.filter(t => t.teacherId === teacherId && t.day === 1);
+  list.sort((a,b) => a.start.localeCompare(b.start));
+  return list;
+}
+function getTeacherStatusToday(teacherId){
+  const classes = getTodayClassesFor(teacherId);
+  if (classes.length === 0) return { status:'no-classes', total:0, done:0, classes:[] };
+  const records = attendance[today] || {};
+  const marked = classes.filter(c => records[teacherId + '_' + c.day + '_' + c.start]);
+  if (marked.length === 0) return { status:'absent', total:classes.length, done:0, classes };
+  if (marked.length === classes.length) return { status:'full', total:classes.length, done:marked.length, classes };
+  return { status:'partial', total:classes.length, done:marked.length, classes };
+}
+function getTeacherTodayReport(teacherId){
+  const tr = attendance[today] || {};
+  for (const k in tr) { if (tr[k].teacherId === teacherId) return tr[k]; }
+  return null;
+}
+
+function loginSuccess(user){
+  currentUser = user;
+  saveSession(user);
+  document.getElementById('mainApp').classList.remove('hidden');
+  const lbl = { 'teacher':'👨‍🏫', 'hod':'👔', 'dean':'🎯' }[user.role];
+  document.getElementById('loggedInUser').textContent = lbl + ' ' + user.name;
+  document.getElementById('welcomeName').textContent = user.name;
+  backToHome();
+}
+
+function logout(){
+  if (!confirm('Logout?')) return;
+  clearSession();
+  window.location.href = 'start.html';
+}
+
+function openRolePanel(role){
+  document.getElementById('welcomeScreen').classList.add('hidden');
+  document.getElementById('teacherDashboard').classList.add('hidden');
+  document.getElementById('hodDashboard').classList.add('hidden');
+  document.getElementById('deanDashboard').classList.add('hidden');
+  document.getElementById('btn-hod').classList.remove('active');
+  document.getElementById('btn-dean').classList.remove('active');
+  document.getElementById('btn-teachers').classList.remove('active');
+  document.getElementById('btn-home').classList.remove('active');
+
+  if (role === 'teacher') {
+    if (!currentUser || currentUser.role !== 'teacher') { toggleTeacherDropdown(); return; }
+    document.getElementById('btn-teachers').classList.add('active');
+    showTeacherDashboard();
+  } else if (role === 'hod') {
+    if (!currentUser || currentUser.role !== 'hod') { alert('❌ Only HOD can access.'); return; }
+    document.getElementById('btn-hod').classList.add('active');
+    showHodDashboard();
+  } else if (role === 'dean') {
+    if (!currentUser || currentUser.role !== 'dean') { alert('❌ Only Dean can access.'); return; }
+    document.getElementById('btn-dean').classList.add('active');
+    showDeanDashboard();
+  }
+}
+
+function backToHome(){
+  document.getElementById('welcomeScreen').classList.remove('hidden');
+  document.getElementById('teacherDashboard').classList.add('hidden');
+  document.getElementById('hodDashboard').classList.add('hidden');
+  document.getElementById('deanDashboard').classList.add('hidden');
+  document.getElementById('btn-hod').classList.remove('active');
+  document.getElementById('btn-dean').classList.remove('active');
+  document.getElementById('btn-teachers').classList.remove('active');
+  document.getElementById('btn-home').classList.add('active');
+  renderWelcomeData();
+}
+
+function renderTeacherList(){
+  document.getElementById('teacherCountLabel').textContent = 'Teachers (' + TEACHERS.length + ')';
+  document.getElementById('teacherList').innerHTML = TEACHERS.map(t => {
+    const init = initials(t.name);
+    const rep = getTeacherTodayReport(t.id);
+    const thumb = rep
+      ? '<img src="' + rep.photo + '" class="w-9 h-9 rounded object-cover border-2 border-green-500 flex-shrink-0">'
+      : '<span class="text-[10px] text-slate-400">—</span>';
+    return '<button onclick="selectTeacher(\'' + t.id + '\')" class="w-full text-left p-2 hover:bg-green-50 rounded-lg flex items-center gap-3 transition">' +
+      '<div class="bg-gradient-to-br from-blue-500 to-cyan-500 text-white w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs flex-shrink-0">' + init + '</div>' +
+      '<div class="flex-1 min-w-0"><div class="font-semibold text-slate-800 text-sm truncate">' + t.name + '</div><div class="text-xs text-slate-500 truncate">' + t.subject + '</div></div>' +
+      thumb + '<div class="text-xs text-slate-400">→</div></button>';
+  }).join('');
+}
+function toggleTeacherDropdown(e){
+  if (e) e.stopPropagation();
+  const dd = document.getElementById('teacherDropdown');
+  const arr = document.getElementById('teacherArrow');
+  if (dd.classList.contains('hidden')) { renderTeacherList(); dd.classList.remove('hidden'); arr.textContent = '▲'; }
+  else { dd.classList.add('hidden'); arr.textContent = '▼'; }
+}
+function closeTeacherDropdown(){
+  document.getElementById('teacherDropdown').classList.add('hidden');
+  document.getElementById('teacherArrow').textContent = '▼';
+}
+function selectTeacher(id){
+  closeTeacherDropdown();
+  const t = TEACHERS.find(x => x.id === id);
+  if (!t) return;
+  currentUser = Object.assign({ role: 'teacher' }, t);
+  saveSession(currentUser);
+  document.getElementById('loggedInUser').textContent = '👨‍🏫 ' + t.name;
+  document.getElementById('welcomeName').textContent = t.name;
+  openRolePanel('teacher');
+}
+document.addEventListener('click', function(e){
+  const dd = document.getElementById('teacherDropdown');
+  const btn = document.getElementById('btn-teachers');
+  if (!dd.classList.contains('hidden') && !dd.contains(e.target) && !btn.contains(e.target)) closeTeacherDropdown();
+});
+
+function renderWelcomeData(){
+  let full = 0, partial = 0, absent = 0;
+  const classPresentMap = {};
+  TEACHERS.forEach(t => {
+    const s = getTeacherStatusToday(t.id);
+    if (s.status === 'full') full++; else if (s.status === 'partial') partial++; else if (s.status === 'absent') absent++;
+    s.classes.forEach(c => {
+      const r = (attendance[today] || {})[t.id + '_' + c.day + '_' + c.start];
+      if (r && (!classPresentMap[c.class] || classPresentMap[c.class] < r.presentStudents)) classPresentMap[c.class] = r.presentStudents;
+    });
+  });
+  let totalPresent = 0;
+  for (const cls in classPresentMap) totalPresent += classPresentMap[cls];
+  const totalAbsent = Math.max(0, DEPT_TOTAL_STUDENTS - totalPresent);
+
+  document.getElementById('heroStatFull').textContent = full;
+  document.getElementById('heroStatPartial').textContent = partial;
+  document.getElementById('heroStatAbsent').textContent = absent;
+  document.getElementById('heroStatStudents').textContent = totalPresent;
+  document.getElementById('heroStatStudentsLabel').textContent = 'of ' + DEPT_TOTAL_STUDENTS + ' present';
+  document.getElementById('heroStatStudentsAbsent').textContent = '❌ Absent: ' + totalAbsent;
+  document.getElementById('statsUpdateTime').textContent = 'Updated ' + formatTime(new Date());
+
+  document.getElementById('teacherReportsGrid').innerHTML = TEACHERS.map(t => {
+    const rep = getTeacherTodayReport(t.id);
+    const init = initials(t.name);
+    if (rep) {
+      return '<div class="card rounded-xl border-2 border-green-400 bg-green-50 p-2 cursor-pointer" onclick="selectTeacher(\'' + t.id + '\')">' +
+        '<img src="' + rep.photo + '" class="w-full h-24 object-cover rounded-lg mb-2 border-2 border-green-500">' +
+        '<div class="text-xs font-bold text-slate-800 truncate">' + t.name + '</div>' +
+        '<div class="text-[10px] text-green-700 font-semibold">✓ ' + rep.presentStudents + '/' + rep.totalStudents + ' • ' + rep.time + '</div></div>';
+    }
+    return '<div class="card rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 p-2 cursor-pointer" onclick="selectTeacher(\'' + t.id + '\')">' +
+      '<div class="w-full h-24 flex items-center justify-center rounded-lg mb-2 bg-slate-100">' +
+      '<div class="bg-gradient-to-br from-slate-400 to-slate-600 text-white w-12 h-12 rounded-full flex items-center justify-center font-bold text-sm">' + init + '</div></div>' +
+      '<div class="text-xs font-bold text-slate-700 truncate">' + t.name + '</div>' +
+      '<div class="text-[10px] text-blue-600 font-semibold">👆 Click to open</div></div>';
+  }).join('');
+
+  const acts = [];
+  const tr = attendance[today] || {};
+  Object.keys(tr).forEach(k => {
+    const r = tr[k];
+    acts.push({ time: r.time, ts: r.timestamp, teacher: r.teacherName, cls: r.className, pr: r.presentStudents, tt: r.totalStudents, photo: r.photo, id: r.id });
+  });
+  acts.sort((a,b) => new Date(b.ts) - new Date(a.ts));
+  const feed = document.getElementById('activityFeed');
+  if (acts.length === 0) {
+    feed.innerHTML = '<div class="text-center py-8"><div class="text-4xl mb-2">📭</div><div class="text-slate-500 text-sm">No activity yet today</div></div>';
+  } else {
+    feed.innerHTML = acts.slice(0, 8).map(a => {
+      return '<div class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl hover:bg-blue-50 transition cursor-pointer" onclick="openPhoto(\'' + a.id + '\')">' +
+        '<div class="bg-gradient-to-br from-blue-500 to-purple-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs flex-shrink-0">' + initials(a.teacher) + '</div>' +
+        '<div class="flex-1 min-w-0"><div class="text-sm font-semibold text-slate-800 truncate">' + a.teacher + ' → <span class="text-blue-600">' + a.cls + '</span></div><div class="text-xs text-slate-500">⏰ ' + a.time + ' • 👥 ' + a.pr + '/' + a.tt + '</div></div>' +
+        '<img src="' + a.photo + '" class="w-10 h-10 rounded object-cover border-2 border-green-500 flex-shrink-0"></div>';
+    }).join('');
+  }
+}
+
+function showTeacherDashboard(){
+  document.getElementById('teacherDashboard').classList.remove('hidden');
+  document.getElementById('teacherNameHeader').textContent = currentUser.name + ' • ' + currentUser.subject;
+  document.getElementById('todayDate').textContent = formatDate(new Date());
+  renderTeacherClasses();
+}
+function renderTeacherClasses(){
+  const div = document.getElementById('teacherClasses');
+  const my = getTodayClassesFor(currentUser.id);
+  const isFallback = (my.length > 0 && todayDay === 0);
+  if (my.length === 0) {
+    div.innerHTML = '<p class="text-slate-400 text-center py-8">No classes scheduled</p>';
+    document.getElementById('teacherClassCount').textContent = '';
+    return;
+  }
+  document.getElementById('teacherClassCount').textContent = (isFallback ? '(Showing Monday) ' : '') + my.length + ' classes today';
+
+  div.innerHTML = my.map(c => {
+    const key = currentUser.id + '_' + c.day + '_' + c.start;
+    const rec = (attendance[today] || {})[key];
+    const isDone = !!rec;
+    let rightSide = '';
+    if (isDone) {
+      rightSide = '<div class="text-center"><img src="' + rec.photo + '" onclick="openPhoto(\'' + rec.id + '\')" class="w-24 h-24 rounded-lg object-cover border-2 border-green-500 cursor-pointer selfie-preview">' +
+        '<div class="text-xs text-green-700 font-bold mt-1">✓ Present</div>' +
+        '<button onclick="retakeAttendance(\'' + c.start + '\', ' + c.day + ')" class="text-xs text-blue-600 underline">Re-take</button></div>';
+    } else {
+      rightSide = '<button onclick="openSelfie(\'' + c.start + '\', ' + c.day + ', \'' + c.class.replace(/\'/g,'') + '\', \'' + c.subject.replace(/\'/g,'') + '\', \'' + c.room + '\', \'' + c.start + ' - ' + c.end + '\')" class="bg-green-600 hover:bg-green-700 text-white px-5 py-4 rounded-lg font-bold flex flex-col items-center gap-1"><span class="text-xl">📸</span><span class="text-xs">Selfie + Mark</span></button>';
+    }
+    const doneBadge = isDone ? '<span class="bg-green-600 text-white text-xs px-2 py-1 rounded font-bold">✓ MARKED</span>' : '<span class="bg-red-500 text-white text-xs px-2 py-1 rounded font-bold">PENDING</span>';
+    const infoBlock = isDone ? '<div class="mt-3 flex items-center gap-3 flex-wrap"><div class="bg-white rounded-lg px-3 py-2 border-2 border-green-300"><div class="text-[10px] text-slate-500 font-semibold">STUDENTS PRESENT</div><div class="text-xl font-bold text-green-700">' + rec.presentStudents + ' <span class="text-sm text-slate-400">/ ' + rec.totalStudents + '</span></div></div><div class="text-xs text-slate-500"><div>📅 ' + rec.dateFormatted + '</div><div>⏱️ ' + rec.time + '</div></div></div>' : '';
+
+    return '<div class="card p-4 rounded-xl border-2 ' + (isDone ? 'border-green-500 bg-green-50' : 'border-slate-200 bg-white') + '">' +
+      '<div class="flex justify-between items-start flex-wrap gap-3">' +
+      '<div class="flex-1 min-w-[200px]">' +
+      '<div class="flex items-center gap-2 mb-1 flex-wrap">' +
+      '<span class="bg-blue-600 text-white text-xs px-2 py-1 rounded font-bold">' + c.class + '</span>' +
+      '<span class="text-xs text-slate-500">Room ' + c.room + '</span>' + doneBadge + '</div>' +
+      '<div class="font-semibold text-slate-800">' + c.subject + '</div>' +
+      '<div class="text-sm text-slate-600">⏰ ' + c.start + ' - ' + c.end + '</div>' + infoBlock + '</div>' +
+      '<div class="flex gap-2 items-center">' + rightSide + '</div></div></div>';
+  }).join('');
+}
+
+function resetCameraArea(){
+  document.getElementById('cameraArea').innerHTML =
+    '<video id="video" autoplay playsinline muted class="w-full h-full object-cover"></video>' +
+    '<div class="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full flex items-center gap-1"><span class="w-2 h-2 bg-white rounded-full animate-pulse"></span> LIVE</div>' +
+    '<div class="absolute bottom-2 left-2 right-2 bg-black bg-opacity-60 text-white text-xs p-2 rounded">📸 Take selfie with students in the frame</div>';
+}
+async function startCamera(){
+  if (!document.getElementById('video')) resetCameraArea();
+  try {
+    cameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode:'user', width:{ideal:1280}, height:{ideal:720} } });
+    const v = document.getElementById('video');
+    if (v) v.srcObject = cameraStream;
+  } catch (err) {
+    document.getElementById('cameraArea').innerHTML = '<div class="w-full h-full flex items-center justify-center text-white text-center p-4"><div><div class="text-4xl mb-2">📷</div><div class="text-sm">Camera not available — Live Server (localhost) par chalayein</div></div></div>';
+  }
+}
+async function openSelfie(classKey, day, className, subject, room, time){
+  activeClass = { classKey, day, className, subject, room, time };
+  capturedPhotoData = null;
+  document.getElementById('selfieTitle').textContent = className + ' — ' + subject;
+  document.getElementById('selfieInfo').textContent = 'Room ' + room + ' • ' + time;
+  document.getElementById('totalStudents').value = CLASS_STRENGTH[className] || 50;
+  document.getElementById('presentStudents').value = '';
+  document.getElementById('absentInfo').textContent = '';
+  resetCameraArea();
+  document.getElementById('cameraArea').classList.remove('hidden');
+  document.getElementById('previewArea').classList.add('hidden');
+  document.getElementById('checkDoneSection').classList.add('hidden');
+  document.getElementById('studentCountSection').classList.add('hidden');
+  document.getElementById('captureBtn').classList.remove('hidden');
+  document.getElementById('saveBtn').classList.add('hidden');
+  document.getElementById('selfieModal').classList.remove('hidden');
+  updateSelfieDT();
+  if (window.selfieInterval) clearInterval(window.selfieInterval);
+  window.selfieInterval = setInterval(updateSelfieDT, 1000);
+  await startCamera();
+}
+function updateSelfieDT(){
+  const n = new Date();
+  document.getElementById('selfieDate').textContent = formatDate(n);
+  document.getElementById('selfieTime').textContent = formatTime(n);
+}
+function closeSelfie(){
+  if (cameraStream) { cameraStream.getTracks().forEach(t => t.stop()); cameraStream = null; }
+  if (window.selfieInterval) clearInterval(window.selfieInterval);
+  document.getElementById('selfieModal').classList.add('hidden');
+  document.getElementById('checkDoneSection').classList.add('hidden');
+  document.getElementById('previewArea').classList.add('hidden');
+  document.getElementById('studentCountSection').classList.add('hidden');
+  document.getElementById('cameraArea').classList.remove('hidden');
+  activeClass = null; capturedPhotoData = null;
+}
+function capturePhoto(){
+  const video = document.getElementById('video');
+  const canvas = document.getElementById('canvas');
+  if (!video || !video.videoWidth) { alert('Camera not ready'); return; }
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(video, 0, 0);
+  const now = new Date();
+  const ds = formatDate(now), ts = formatTime(now);
+  const bH = 90;
+  ctx.fillStyle = 'rgba(0,0,0,0.7)'; ctx.fillRect(0, canvas.height - bH, canvas.width, bH);
+  ctx.fillStyle = '#10b981'; ctx.fillRect(0, canvas.height - bH, 6, bH);
+  ctx.fillStyle = '#fff'; ctx.font = 'bold 18px Segoe UI';
+  ctx.fillText(currentUser.name + '  |  ' + activeClass.className + '  |  ' + activeClass.subject, 15, canvas.height - bH + 26);
+  ctx.fillStyle = '#e2e8f0'; ctx.font = '15px Segoe UI';
+  ctx.fillText('Date: ' + ds + '   Time: ' + ts, 15, canvas.height - bH + 52);
+  ctx.fillStyle = '#a7f3d0'; ctx.font = '13px Segoe UI';
+  ctx.fillText('Career Point Hamirpur · CSE • Room ' + activeClass.room, 15, canvas.height - bH + 76);
+  capturedPhotoData = canvas.toDataURL('image/jpeg', 0.75);
+  document.getElementById('capturedPhoto').src = capturedPhotoData;
+  document.getElementById('cameraArea').classList.add('hidden');
+  document.getElementById('previewArea').classList.remove('hidden');
+  document.getElementById('captureBtn').classList.add('hidden');
+  document.getElementById('checkDoneSection').classList.remove('hidden');
+  if (cameraStream) { cameraStream.getTracks().forEach(t => t.stop()); cameraStream = null; }
+}
+function retakePhoto(){
+  document.getElementById('checkDoneSection').classList.add('hidden');
+  document.getElementById('previewArea').classList.add('hidden');
+  document.getElementById('cameraArea').classList.remove('hidden');
+  document.getElementById('captureBtn').classList.remove('hidden');
+  capturedPhotoData = null;
+  resetCameraArea();
+  startCamera();
+}
+function donePhoto(){
+  document.getElementById('checkDoneSection').classList.add('hidden');
+  document.getElementById('studentCountSection').classList.remove('hidden');
+  document.getElementById('saveBtn').classList.remove('hidden');
+  setTimeout(() => document.getElementById('presentStudents').focus(), 100);
+}
+function updateAbsentInfo(){
+  const t = parseInt(document.getElementById('totalStudents').value) || 0;
+  const p = parseInt(document.getElementById('presentStudents').value) || 0;
+  document.getElementById('absentInfo').innerHTML = p > 0 ? '<span class="text-red-600 font-semibold">Absent: ' + (t - p) + '</span> • <span class="text-green-600 font-semibold">Present: ' + p + '</span>' : '';
+}
+function saveAttendance(){
+  if (!capturedPhotoData) { alert('Capture photo first'); return; }
+  const total = parseInt(document.getElementById('totalStudents').value) || 0;
+  const present = parseInt(document.getElementById('presentStudents').value);
+  if (isNaN(present) || present < 0) { alert('Enter valid present count'); return; }
+  if (present > total) { alert('Present cannot exceed ' + total); return; }
+  const now = new Date();
+  const key = currentUser.id + '_' + activeClass.day + '_' + activeClass.classKey;
+  attendance[today] = attendance[today] || {};
+  attendance[today][key] = {
+    id: currentUser.id + '_' + activeClass.day + '_' + activeClass.classKey + '_' + Date.now(),
+    teacherId: currentUser.id, teacherName: currentUser.name, className: activeClass.className,
+    subject: activeClass.subject, room: activeClass.room, timeSlot: activeClass.time,
+    photo: capturedPhotoData, date: today, dateFormatted: formatDate(now), time: formatTime(now),
+    timestamp: now.toISOString(), totalStudents: total, presentStudents: present,
+    absentStudents: total - present, status: 'present'
+  };
+  try { localStorage.setItem('attendance_v8', JSON.stringify(attendance)); } catch(e){}
+  closeSelfie();
+  renderTeacherClasses();
+  showToast('✓ Saved — ' + present + '/' + total);
+}
+function retakeAttendance(classKey, day){
+  const key = currentUser.id + '_' + day + '_' + classKey;
+  if (attendance[today] && attendance[today][key]) {
+    const c = attendance[today][key];
+    openSelfie(classKey, day, c.className, c.subject, c.room, c.timeSlot);
+    setTimeout(() => document.getElementById('presentStudents').value = c.presentStudents, 300);
+  }
+}
+function showToast(msg){
+  const t = document.createElement('div');
+  t.className = 'fixed top-40 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-2xl z-[70] font-semibold';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3000);
+}
+function openPhoto(id){
+  let found = null;
+  outer: for (const dk in attendance) { for (const k in attendance[dk]) { if (attendance[dk][k].id === id) { found = attendance[dk][k]; break outer; } } }
+  if (!found) return;
+  document.getElementById('viewPhoto').src = found.photo;
+  document.getElementById('viewPhotoInfo').innerHTML =
+    '<div class="font-bold text-slate-800">' + found.teacherName + ' • ' + found.className + '</div>' +
+    '<div>📚 ' + found.subject + ' • Room ' + found.room + '</div>' +
+    '<div>📅 ' + found.dateFormatted + ' • ⏰ ' + found.time + '</div>' +
+    '<div class="mt-2 p-2 bg-green-50 rounded"><span class="text-green-700 font-bold">👥 Present: ' + found.presentStudents + '/' + found.totalStudents + '</span><span class="text-red-600 ml-3">Absent: ' + found.absentStudents + '</span></div>';
+  document.getElementById('photoModal').classList.remove('hidden');
+}
+function closePhoto(){ document.getElementById('photoModal').classList.add('hidden'); }
+
+function showHodDashboard(){
+  document.getElementById('hodDashboard').classList.remove('hidden');
+  document.getElementById('hodNameHeader').textContent = currentUser.name + ' • Head of ' + currentUser.dept;
+  document.getElementById('hodDate').textContent = formatDate(new Date());
+  renderHodDashboard();
+}
+function renderHodDashboard(){
+  const deptTeachers = TEACHERS.filter(t => t.dept === currentUser.dept);
+  let full = 0, partial = 0, absent = 0;
+  deptTeachers.forEach(t => {
+    const s = getTeacherStatusToday(t.id);
+    if (s.status === 'full') full++; else if (s.status === 'partial') partial++; else if (s.status === 'absent') absent++;
+  });
+  document.getElementById('hodStatPresent').textContent = full;
+  document.getElementById('hodStatPartial').textContent = partial;
+  document.getElementById('hodStatAbsent').textContent = absent;
+  document.getElementById('hodStatTotal').textContent = deptTeachers.length;
+  document.getElementById('hodTeacherCount').textContent = deptTeachers.length + ' teachers';
+
+  const acts = [];
+  const tr = attendance[today] || {};
+  Object.keys(tr).forEach(k => {
+    const r = tr[k];
+    if (deptTeachers.find(t => t.id === r.teacherId)) acts.push({ time:r.time, ts:r.timestamp, teacher:r.teacherName, cls:r.className, pr:r.presentStudents, tt:r.totalStudents, photo:r.photo, id:r.id });
+  });
+  acts.sort((a,b) => new Date(b.ts) - new Date(a.ts));
+  const feed = document.getElementById('hodActivityFeed');
+  if (acts.length === 0) feed.innerHTML = '<div class="text-center py-6"><div class="text-3xl mb-1">📭</div><div class="text-slate-500 text-xs">No activity yet</div></div>';
+  else feed.innerHTML = acts.slice(0, 6).map(a => {
+    return '<div class="activity-item flex items-center gap-2 p-2 bg-slate-50 rounded-lg hover:bg-blue-50 transition cursor-pointer" onclick="openPhoto(\'' + a.id + '\')">' +
+      '<div class="bg-gradient-to-br from-blue-500 to-purple-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-[10px] flex-shrink-0">' + initials(a.teacher) + '</div>' +
+      '<div class="flex-1 min-w-0"><div class="text-xs font-semibold text-slate-800 truncate">' + a.teacher + ' → <span class="text-blue-600">' + a.cls + '</span></div><div class="text-[10px] text-slate-500">⏰ ' + a.time + ' • 👥 ' + a.pr + '/' + a.tt + '</div></div>' +
+      '<img src="' + a.photo + '" class="w-8 h-8 rounded object-cover border-2 border-green-500 flex-shrink-0"></div>';
+  }).join('');
+
+  const alerts = [];
+  deptTeachers.forEach(t => {
+    const s = getTeacherStatusToday(t.id);
+    if (s.status === 'absent') alerts.push({ t, type:'absent', s });
+    else if (s.status === 'partial') alerts.push({ t, type:'partial', s });
+  });
+  document.getElementById('hodAlertCount').textContent = alerts.length + ' alerts';
+  const af = document.getElementById('hodAlertFeed');
+  if (alerts.length === 0) af.innerHTML = '<div class="text-center py-6"><div class="text-3xl mb-1">🎉</div><div class="text-green-600 font-bold text-xs">All on track!</div></div>';
+  else af.innerHTML = alerts.map(a => {
+    const isA = a.type === 'absent';
+    return '<div class="activity-item flex items-center gap-2 p-2 ' + (isA ? 'bg-red-50 border-red-300' : 'bg-amber-50 border-amber-300') + ' border-2 rounded-lg cursor-pointer hover:opacity-90" onclick="showHistory(\'' + a.t.id + '\')">' +
+      '<div class="text-xl flex-shrink-0">' + (isA ? '❌' : '⚠️') + '</div>' +
+      '<div class="flex-1 min-w-0"><div class="text-xs font-bold text-slate-800">' + a.t.name + '</div><div class="text-[10px] text-slate-600">' + (isA ? 'Nothing marked' : a.s.done + '/' + a.s.total + ' marked') + '</div></div>' +
+      '<button class="bg-blue-600 text-white text-[10px] px-2 py-1 rounded font-semibold flex-shrink-0">View</button></div>';
+  }).join('');
+
+  document.getElementById('hodTeacherList').innerHTML = deptTeachers.map(t => {
+    const s = getTeacherStatusToday(t.id);
+    const sc = s.status === 'full' ? 'border-green-500 bg-green-50' : s.status === 'absent' ? 'border-red-400 bg-red-50' : s.status === 'partial' ? 'border-amber-400 bg-amber-50' : 'border-slate-200 bg-white';
+    const sbMap = {
+      'full':'<span class="bg-green-600 text-white text-[10px] px-2 py-0.5 rounded font-bold">FULL</span>',
+      'partial':'<span class="bg-amber-500 text-white text-[10px] px-2 py-0.5 rounded font-bold">PARTIAL</span>',
+      'absent':'<span class="bg-red-600 text-white text-[10px] px-2 py-0.5 rounded font-bold">NOT MARKED</span>',
+      'no-classes':'<span class="bg-slate-400 text-white text-[10px] px-2 py-0.5 rounded font-bold">NO CLASS</span>'
+    };
+    const sb = sbMap[s.status];
+    let days = 0;
+    for (let i = 1; i <= 5; i++) {
+      const d = new Date(); d.setDate(d.getDate() - i);
+      if (d.getDay() === 0) continue;
+      const dk = d.toISOString().split('T')[0];
+      const rs = attendance[dk] || {};
+      if (Object.keys(rs).some(k => k.indexOf(t.id + '_') === 0)) days++;
+    }
+    let stu = 0;
+    s.classes.forEach(c => {
+      const r = (attendance[today] || {})[t.id + '_' + c.day + '_' + c.start];
+      if (r) stu += r.presentStudents;
+    });
+    const rep = getTeacherTodayReport(t.id);
+    const thumbHTML = rep
+      ? '<img src="' + rep.photo + '" class="w-12 h-12 rounded-lg object-cover border-2 border-green-500 flex-shrink-0 cursor-pointer" onclick="event.stopPropagation(); openPhoto(\'' + rep.id + '\')">'
+      : '<div class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 text-white flex items-center justify-center font-bold text-lg flex-shrink-0">' + initials(t.name) + '</div>';
+    return '<div class="card teacher-card p-4 rounded-xl border-2 ' + sc + '" onclick="showHistory(\'' + t.id + '\')">' +
+      '<div class="flex items-start gap-3">' + thumbHTML +
+      '<div class="flex-1 min-w-0">' +
+      '<div class="flex items-start justify-between gap-2">' +
+      '<div class="min-w-0"><div class="font-bold text-blue-700 cursor-pointer truncate">' + t.name + '</div><div class="text-xs text-slate-500 truncate">' + t.subject + '</div></div>' +
+      sb + '</div>' +
+      '<div class="grid grid-cols-3 gap-2 mt-3 text-center">' +
+      '<div class="bg-white rounded-lg py-1.5 border border-slate-200"><div class="text-sm font-bold text-blue-700">' + s.done + '/' + s.total + '</div><div class="text-[9px] text-slate-500">Classes</div></div>' +
+      '<div class="bg-white rounded-lg py-1.5 border border-slate-200"><div class="text-sm font-bold text-purple-700">' + stu + '</div><div class="text-[9px] text-slate-500">Students</div></div>' +
+      '<div class="bg-white rounded-lg py-1.5 border border-slate-200"><div class="text-sm font-bold text-green-700">' + days + 'd</div><div class="text-[9px] text-slate-500">History</div></div>' +
+      '</div>' +
+      '<button class="w-full mt-3 bg-blue-600 hover:bg-blue-700 text-white text-xs py-2 rounded-lg font-semibold">View 5-Day History →</button>' +
+      '</div></div></div>';
+  }).join('');
+}
+
+function showHistory(teacherId){
+  const teacher = TEACHERS.find(t => t.id === teacherId);
+  if (!teacher) return;
+  document.getElementById('teacherAvatar').textContent = initials(teacher.name);
+  document.getElementById('historyTitle').textContent = teacher.name;
+  document.getElementById('historySubtitle').textContent = teacher.dept + ' • ' + teacher.subject;
+
+  const days = [];
+  for (let i = 1; i <= 5; i++) {
+    const d = new Date(); d.setDate(d.getDate() - i);
+    if (d.getDay() === 0) continue;
+    days.push({ date: d, dk: d.toISOString().split('T')[0] });
+  }
+
+  let tE = 0, tA = 0, tSP = 0, tSE = 0;
+  const dailyHTML = days.map(dayObj => {
+    const date = dayObj.date, dk = dayObj.dk;
+    const dow = date.getDay(), dn = getDayName(dow), ds = formatDate(date);
+    let dClasses = TIMETABLE.filter(t => t.teacherId === teacherId && t.day === dow);
+    if (dClasses.length === 0) dClasses = TIMETABLE.filter(t => t.teacherId === teacherId && t.day === 1);
+    dClasses.sort((a,b) => a.start.localeCompare(b.start));
+    const recs = attendance[dk] || {};
+    const marked = dClasses.filter(c => recs[teacherId + '_' + c.day + '_' + c.start]);
+    tE += dClasses.length; tA += marked.length;
+    let dp = 0, dt = 0;
+    const ch = dClasses.map(c => {
+      const key = teacherId + '_' + c.day + '_' + c.start;
+      const r = recs[key];
+      const done = !!r;
+      const str = CLASS_STRENGTH[c.class] || 50;
+      if (done) { dp += r.presentStudents; dt += r.totalStudents; tSP += r.presentStudents; tSE += r.totalStudents; }
+      const rightSide = done
+        ? '<div class="text-center flex-shrink-0"><div class="text-base font-bold text-green-700">' + r.presentStudents + '<span class="text-[10px] text-slate-400">/' + r.totalStudents + '</span></div><div class="text-[9px] text-slate-500">students</div></div>' +
+          '<div class="text-[11px] text-slate-500 text-right flex-shrink-0"><div>⏰ ' + r.time + '</div><div class="text-green-600 font-semibold">✓ Marked</div></div>' +
+          '<img src="' + r.photo + '" onclick="event.stopPropagation(); openPhoto(\'' + r.id + '\')" class="w-11 h-11 rounded object-cover cursor-pointer border-2 border-green-500 flex-shrink-0">'
+        : '<div class="text-center flex-shrink-0"><div class="text-base font-bold text-red-600">0<span class="text-[10px] text-slate-400">/' + str + '</span></div><div class="text-[9px] text-slate-500">students</div></div>' +
+          '<div class="text-[11px] text-red-600 font-bold flex-shrink-0">Not Marked</div>';
+      return '<div class="flex items-center gap-3 p-3 rounded-lg ' + (done ? 'bg-green-50 border-l-4 border-green-500' : 'bg-red-50 border-l-4 border-red-400') + '">' +
+        '<div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap"><span class="font-bold text-slate-800 text-sm">' + c.class + '</span><span class="text-[11px] text-slate-500">' + c.start + '–' + c.end + ' • Room ' + c.room + '</span></div><div class="text-xs text-slate-600">' + c.subject + '</div></div>' +
+        rightSide + '</div>';
+    }).join('');
+    const pct = dClasses.length > 0 ? Math.round((marked.length / dClasses.length) * 100) : 0;
+    const col = pct === 100 ? 'border-green-500' : pct > 0 ? 'border-amber-500' : 'border-red-500';
+    const pctBg = pct === 100 ? 'bg-green-100 text-green-700' : pct > 0 ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700';
+    return '<div class="bg-white rounded-xl border-2 ' + col + ' overflow-hidden">' +
+      '<div class="bg-slate-50 px-4 py-2 flex justify-between items-center flex-wrap gap-2">' +
+      '<div><div class="font-bold text-slate-800 text-sm">' + dn + ' — ' + ds + '</div><div class="text-[11px] text-slate-500">' + marked.length + '/' + dClasses.length + ' marked</div></div>' +
+      '<div class="flex items-center gap-2 flex-wrap">' + (dt > 0 ? '<div class="bg-blue-100 text-blue-700 px-2.5 py-1 rounded-lg text-[11px] font-bold">👥 ' + dp + '/' + dt + '</div>' : '') +
+      '<div class="text-[11px] font-bold px-2.5 py-1 rounded-lg ' + pctBg + '">' + pct + '%</div></div></div>' +
+      '<div class="p-3 space-y-2">' + ch + '</div></div>';
+  }).join('');
+
+  const oP = tE > 0 ? Math.round((tA / tE) * 100) : 0;
+  const sP = tSE > 0 ? Math.round((tSP / tSE) * 100) : 0;
+  document.getElementById('historySummary').innerHTML =
+    '<div class="bg-blue-500 text-white rounded-xl p-3 text-center"><div class="text-2xl font-bold">' + tA + '/' + tE + '</div><div class="text-xs">Classes Marked</div></div>' +
+    '<div class="bg-green-500 text-white rounded-xl p-3 text-center"><div class="text-2xl font-bold">' + oP + '%</div><div class="text-xs">Rate</div></div>' +
+    '<div class="bg-purple-500 text-white rounded-xl p-3 text-center"><div class="text-2xl font-bold">' + tSP + '</div><div class="text-xs">Students</div></div>' +
+    '<div class="bg-amber-500 text-white rounded-xl p-3 text-center"><div class="text-2xl font-bold">' + sP + '%</div><div class="text-xs">Student %</div></div>';
+  document.getElementById('historyContent').innerHTML = dailyHTML;
+  document.getElementById('historyModal').classList.remove('hidden');
+}
+function closeHistory(){ document.getElementById('historyModal').classList.add('hidden'); }
+
+function showDeanDashboard(){
+  document.getElementById('deanDashboard').classList.remove('hidden');
+  document.getElementById('deanNameHeader').textContent = currentUser.name + ' • Dean';
+  document.getElementById('deanDate').textContent = formatDate(new Date());
+  renderDeanDashboard();
+}
+function renderDeanDashboard(){
+  let full = 0, partial = 0, absent = 0;
+  document.getElementById('deanTeacherList').innerHTML = TEACHERS.map(t => {
+    const s = getTeacherStatusToday(t.id);
+    if (s.status === 'full') full++; else if (s.status === 'partial') partial++; else if (s.status === 'absent') absent++;
+    const col = s.status === 'full' ? 'border-green-500 bg-green-50' : s.status === 'absent' ? 'border-red-400 bg-red-50' : s.status === 'partial' ? 'border-amber-400 bg-amber-50' : 'border-slate-200 bg-white';
+    const icon = s.status === 'full' ? '✅' : s.status === 'absent' ? '❌' : s.status === 'partial' ? '⚠️' : '—';
+    let tp = 0, ts = 0;
+    s.classes.forEach(c => {
+      const r = (attendance[today] || {})[t.id + '_' + c.day + '_' + c.start];
+      const str = CLASS_STRENGTH[c.class] || 50;
+      ts += str;
+      if (r) tp += r.presentStudents;
+    });
+    return '<div class="card p-3 rounded-xl border-2 ' + col + '"><div class="flex justify-between items-center"><div><div class="font-bold text-slate-800">' + t.name + '</div><div class="text-xs text-slate-500">' + t.dept + ' • ' + t.subject + '</div><div class="text-xs mt-1 font-semibold text-blue-600">👥 ' + tp + '/' + ts + '</div></div><div class="text-right"><div class="text-lg">' + icon + '</div><div class="text-xs text-slate-600">' + s.done + '/' + s.total + '</div></div></div></div>';
+  }).join('');
+  document.getElementById('deanStatPresent').textContent = full;
+  document.getElementById('deanStatPartial').textContent = partial;
+  document.getElementById('deanStatAbsent').textContent = absent;
+  document.getElementById('deanStatTotal').textContent = TEACHERS.length;
+}
+function downloadDeanReport(){
+  let csv = 'Teacher,Department,Subject,Status,Classes Marked,Total Classes\n';
+  TEACHERS.forEach(t => {
+    const s = getTeacherStatusToday(t.id);
+    csv += '"' + t.name + '","' + t.dept + '","' + t.subject + '","' + s.status.toUpperCase() + '",' + s.done + ',' + s.total + '\n';
+  });
+  csv += '\n\n=== DETAILED LOG ===\nTeacher,Class,Subject,Room,Date,Time,Present,Total,Absent\n';
+  for (const dk in attendance) {
+    for (const k in attendance[dk]) {
+      const r = attendance[dk][k];
+      csv += '"' + r.teacherName + '","' + r.className + '","' + r.subject + '","' + r.room + '","' + r.dateFormatted + '","' + r.time + '",' + r.presentStudents + ',' + r.totalStudents + ',' + r.absentStudents + '\n';
+    }
+  }
+  const blob = new Blob([csv], { type:'text/csv' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'dean_report_' + today + '.csv';
+  a.click();
+}
+function openTimetable(){
+  if (!currentUser || !currentUser.id) return;
+  window.open(currentUser.id + '.html', '_blank');
+}
+
+setInterval(() => {
+  if (!currentUser) return;
+  if (!document.getElementById('welcomeScreen').classList.contains('hidden')) renderWelcomeData();
+  else if (currentUser.role === 'teacher' && !document.getElementById('teacherDashboard').classList.contains('hidden')) renderTeacherClasses();
+  else if (currentUser.role === 'hod' && !document.getElementById('hodDashboard').classList.contains('hidden')) renderHodDashboard();
+  else if (currentUser.role === 'dean' && !document.getElementById('deanDashboard').classList.contains('hidden')) renderDeanDashboard();
+}, 10000);
+
+window.addEventListener('DOMContentLoaded', function(){
+  renderTeacherList();
+  const ps = document.getElementById('presentStudents');
+  if (ps) ps.addEventListener('input', updateAbsentInfo);
+  const tsField = document.getElementById('totalStudents');
+  if (tsField) tsField.addEventListener('input', updateAbsentInfo);
+
+  const s = loadSession();
+  if (!s) { window.location.href = 'start.html'; return; }
+
+  let u = null;
+  if (s.role === 'teacher') u = TEACHERS.find(t => t.id === s.id);
+  else if (s.role === 'hod') u = HODS.find(h => h.id === s.id);
+  else if (s.role === 'dean') u = DEANS.find(d => d.id === s.id);
+
+  if (!u) { window.location.href = 'start.html'; return; }
+
+  currentUser = Object.assign({ role: s.role }, u);
+  document.getElementById('mainApp').classList.remove('hidden');
+  const lbl = { 'teacher':'👨‍🏫', 'hod':'👔', 'dean':'🎯' }[s.role];
+  document.getElementById('loggedInUser').textContent = lbl + ' ' + u.name;
+  document.getElementById('welcomeName').textContent = u.name;
+  backToHome();
+});
+</script>
+<!-- ================= THEME TOGGLE ================= -->
+<button id="themeToggle" title="Toggle Theme" 
+  style="position:fixed;top:14px;right:14px;z-index:9999;width:48px;height:48px;border-radius:50%;
+  border:2px solid rgba(255,255,255,.5);background:linear-gradient(135deg,#3b82f6,#1e40af);
+  color:#fff;font-size:1.25rem;cursor:pointer;box-shadow:0 6px 20px rgba(37,99,235,.4);
+  display:grid;place-items:center;transition:transform .2s ease;">
+  <span id="themeIcon">🌙</span>
+</button>
+
+<style id="themeStyles">
+  #themeToggle:hover { transform: scale(1.1) !important; }
+  #themeToggle:active { transform: scale(.93) !important; }
+
+  /* ================= DARK THEME ================= */
+  html[data-theme="dark"] body,
+  html[data-theme="dark"] {
+    background: linear-gradient(135deg,#081227 0%,#132a54 45%,#081227 100%) !important;
+    background-attachment: fixed !important;
+    color: #eaf1ff !important;
+  }
+
+  /* White panels → dark glass */
+  html[data-theme="dark"] .bg-white { 
+    background: rgba(20,32,60,.85) !important; 
+    color: #eaf1ff !important; 
+    border-color: rgba(255,255,255,.1) !important;
+  }
+  html[data-theme="dark"] .bg-slate-50 { background: rgba(255,255,255,.045) !important; color: #cbd5e1 !important; }
+  html[data-theme="dark"] .bg-slate-100 { background: rgba(255,255,255,.07) !important; color: #eaf1ff !important; border-color: rgba(255,255,255,.1) !important; }
+  html[data-theme="dark"] .bg-slate-200 { background: rgba(255,255,255,.11) !important; color: #eaf1ff !important; }
+  html[data-theme="dark"] .bg-slate-300 { background: rgba(255,255,255,.15) !important; color: #eaf1ff !important; }
+  html[data-theme="dark"] .bg-slate-600,
+  html[data-theme="dark"] .bg-slate-700 { background: rgba(255,255,255,.2) !important; color: #eaf1ff !important; }
+
+  /* Text */
+  html[data-theme="dark"] .text-slate-800 { color: #eaf1ff !important; }
+  html[data-theme="dark"] .text-slate-700 { color: #cbd5e1 !important; }
+  html[data-theme="dark"] .text-slate-600 { color: #94a3b8 !important; }
+  html[data-theme="dark"] .text-slate-500 { color: #7f93b3 !important; }
+  html[data-theme="dark"] .text-slate-400 { color: #64748b !important; }
+
+  /* Borders */
+  html[data-theme="dark"] .border-slate-200 { border-color: rgba(255,255,255,.12) !important; }
+  html[data-theme="dark"] .border-slate-300 { border-color: rgba(255,255,255,.15) !important; }
+  html[data-theme="dark"] .border-slate-400 { border-color: rgba(255,255,255,.2) !important; }
+
+  /* Nav bar / header */
+  html[data-theme="dark"] .bg-white.shadow-lg,
+  html[data-theme="dark"] .bg-white.shadow-md,
+  html[data-theme="dark"] .bg-white.sticky {
+    background: rgba(8,18,39,.85) !important;
+    backdrop-filter: blur(12px);
+    border-bottom-color: rgba(255,255,255,.1) !important;
+  }
+
+  /* Inputs */
+  html[data-theme="dark"] input,
+  html[data-theme="dark"] select,
+  html[data-theme="dark"] textarea {
+    background: rgba(0,0,0,.3) !important;
+    border-color: rgba(255,255,255,.18) !important;
+    color: #eaf1ff !important;
+  }
+  html[data-theme="dark"] input::placeholder { color: #7f93b3 !important; }
+
+  /* Nav buttons tints — dark */
+  html[data-theme="dark"] .nav-btn.bg-blue-100 { background: rgba(59,130,246,.2) !important; color: #bfdbfe !important; border-color: rgba(59,130,246,.4) !important; }
+  html[data-theme="dark"] .nav-btn.bg-green-100 { background: rgba(16,185,129,.2) !important; color: #a7f3d0 !important; border-color: rgba(16,185,129,.4) !important; }
+  html[data-theme="dark"] .nav-btn.bg-purple-100 { background: rgba(139,92,246,.2) !important; color: #e9d5ff !important; border-color: rgba(139,92,246,.4) !important; }
+  html[data-theme="dark"] .nav-btn.bg-slate-100 { background: rgba(255,255,255,.07) !important; color: #eaf1ff !important; border-color: rgba(255,255,255,.12) !important; }
+
+  /* ================= start.html custom classes ================= */
+  html[data-theme="dark"] header { background: rgba(8,18,39,.75) !important; border-bottom-color: rgba(255,255,255,.1) !important; }
+  html[data-theme="dark"] .head-text h1 { 
+    background: linear-gradient(90deg,#fff,#f7c948) !important; 
+    -webkit-background-clip: text !important; background-clip: text !important; 
+    -webkit-text-fill-color: transparent !important; 
+  }
+  html[data-theme="dark"] .head-text p { color: #9fb3d1 !important; }
+  html[data-theme="dark"] .page-title { color: #eaf1ff !important; }
+  html[data-theme="dark"] .page-sub { color: #9fb3d1 !important; }
+  html[data-theme="dark"] .card { 
+    background: linear-gradient(145deg, rgba(255,255,255,.07), rgba(255,255,255,.03)) !important; 
+    border-color: rgba(255,255,255,.13) !important; 
+    color: #eaf1ff !important;
+  }
+  html[data-theme="dark"] .card:hover { border-color: rgba(247,201,72,.6) !important; }
+  html[data-theme="dark"] .card-info .name { color: #eaf1ff !important; }
+  html[data-theme="dark"] .card-info .cls { 
+    background: rgba(120,170,255,.16) !important; 
+    border-color: rgba(120,170,255,.3) !important; 
+    color: #bcd4ff !important; 
+  }
+  html[data-theme="dark"] .hint { 
+    background: rgba(247,201,72,.08) !important; 
+    border-color: rgba(247,201,72,.25) !important; 
+    color: #cbd5e1 !important; 
+  }
+  html[data-theme="dark"] .hint b { color: #f7c948 !important; }
+  html[data-theme="dark"] .pw-card { 
+    background: #132a54 !important; 
+    border-color: rgba(255,255,255,.14) !important; 
+    color: #eaf1ff !important; 
+  }
+  html[data-theme="dark"] .pw-name { color: #eaf1ff !important; }
+  html[data-theme="dark"] .pw-badge { 
+    background: rgba(120,170,255,.16) !important; 
+    border-color: rgba(120,170,255,.3) !important; 
+    color: #bcd4ff !important; 
+  }
+  html[data-theme="dark"] .pw-divider { background: linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent) !important; }
+  html[data-theme="dark"] .pw-field input { 
+    background: rgba(0,0,0,.3) !important; 
+    border-color: rgba(255,255,255,.18) !important; 
+    color: #fff !important; 
+  }
+  html[data-theme="dark"] .pw-field input::placeholder { color: #7f93b3 !important; }
+  html[data-theme="dark"] .pw-back { color: #9fb3d1 !important; }
+  html[data-theme="dark"] .pw-hint { color: #7f93b3 !important; }
+
+  /* Modals dark */
+  html[data-theme="dark"] #historyModal .bg-white,
+  html[data-theme="dark"] #photoModal .bg-white,
+  html[data-theme="dark"] #selfieModal .bg-white {
+    background: #0f1f3d !important;
+    color: #eaf1ff !important;
+    border-color: rgba(255,255,255,.15) !important;
+  }
+
+  /* Scrollbar dark */
+  html[data-theme="dark"] ::-webkit-scrollbar-track { background: rgba(255,255,255,.04) !important; }
+  html[data-theme="dark"] ::-webkit-scrollbar-thumb { background: rgba(247,201,72,.3) !important; }
+</style>
+
+<script>
+  (function(){
+    // Apply saved theme IMMEDIATELY (before anything renders)
+    var saved = localStorage.getItem('app_theme') || 'light';
+    document.documentElement.setAttribute('data-theme', saved);
+
+    function updateIcon(){
+      var t = localStorage.getItem('app_theme') || 'light';
+      var icon = document.getElementById('themeIcon');
+      if (icon) icon.textContent = (t === 'dark') ? '☀️' : '🌙';
+    }
+
+    // Update icon after DOM ready
+    document.addEventListener('DOMContentLoaded', function(){
+      updateIcon();
+
+      var btn = document.getElementById('themeToggle');
+      if (btn) {
+        btn.addEventListener('click', function(){
+          var cur = localStorage.getItem('app_theme') || 'light';
+          var next = (cur === 'dark') ? 'light' : 'dark';
+          localStorage.setItem('app_theme', next);
+          document.documentElement.setAttribute('data-theme', next);
+          updateIcon();
+        });
+      }
+    });
+  })();
+</script>
+<!-- ================= NOTICE BOARD SYSTEM v2 ================= -->
+
+<!-- 1. NOTICE BANNER (top slide-in with bounce) -->
+<div id="noticeBar" style="
+  position:fixed;top:0;left:0;right:0;z-index:10000;
+  transform:translateY(-130%);
+  opacity:0;pointer-events:none;
+  transition:transform .55s cubic-bezier(.2,1.6,.5,1), opacity .4s ease;
+">
+  <div id="noticeInner" style="
+    max-width:1100px;margin:14px auto;padding:14px 18px;border-radius:16px;
+    background:linear-gradient(135deg,#3b82f6,#1e40af);color:#fff;
+    box-shadow:0 12px 40px rgba(37,99,235,.35);
+    display:flex;align-items:center;gap:14px;
+    border:1px solid rgba(255,255,255,.18);
+    font-family:'Segoe UI',system-ui,sans-serif;
+    position:relative;overflow:hidden;
+  ">
+    <!-- shine effect -->
+    <div style="position:absolute;inset:0;background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.25) 50%,transparent 70%);
+      transform:translateX(-120%);animation:noticeShine 2.2s ease-in-out infinite;"></div>
+
+    <div id="noticeIcon" style="flex:0 0 44px;width:44px;height:44px;border-radius:50%;
+      background:rgba(255,255,255,.22);display:grid;place-items:center;font-size:1.5rem;
+      animation:noticeBellPulse 1.8s ease-in-out infinite;">📢</div>
+
+    <div style="flex:1;min-width:0;position:relative;z-index:1;">
+      <div id="noticeTitle" style="font-size:.7rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:800;opacity:.85;margin-bottom:3px;">Notice</div>
+      <div id="noticeText" style="font-size:.98rem;font-weight:600;line-height:1.35;">...</div>
+      <div id="noticeTime" style="font-size:.7rem;opacity:.75;margin-top:3px;"></div>
+    </div>
+
+    <div id="noticeCount" style="
+      flex-shrink:0;background:rgba(255,255,255,.25);border-radius:99px;
+      padding:4px 12px;font-size:.7rem;font-weight:800;letter-spacing:.5px;
+      position:relative;z-index:1;">+1 more</div>
+
+    <button id="noticeClose" style="
+      background:rgba(255,255,255,.18);border:0;color:#fff;
+      width:34px;height:34px;border-radius:50%;cursor:pointer;
+      font-size:1rem;font-weight:700;flex-shrink:0;
+      display:grid;place-items:center;transition:background .2s;
+      position:relative;z-index:1;">✕</button>
+  </div>
+</div>
+
+<!-- 2. BELL ICON WITH BADGE (top-right, next to theme toggle) -->
+<button id="noticeBell" title="Notices" style="
+  position:fixed;top:14px;right:74px;z-index:9999;
+  width:48px;height:48px;border-radius:50%;
+  border:2px solid rgba(255,255,255,.5);
+  background:linear-gradient(135deg,#f59e0b,#d97706);
+  color:#fff;font-size:1.25rem;cursor:pointer;
+  box-shadow:0 6px 20px rgba(245,158,11,.4);
+  display:grid;place-items:center;
+  transition:transform .2s ease;
+">
+  <span id="bellIcon">🔔</span>
+  <span id="bellBadge" style="
+    display:none;position:absolute;top:-4px;right:-4px;
+    min-width:22px;height:22px;padding:0 6px;
+    border-radius:99px;background:#ef4444;color:#fff;
+    font-size:.68rem;font-weight:900;line-height:22px;
+    text-align:center;border:2px solid #fff;
+    box-shadow:0 2px 6px rgba(239,68,68,.5);
+    animation:badgePop .35s cubic-bezier(.2,1.6,.5,1);
+  ">0</span>
+</button>
+
+<!-- 3. WRITE NOTICE FAB (bottom-right) -->
+<button id="noticeFab" title="Likho Notice" style="
+  position:fixed;bottom:20px;right:20px;z-index:9998;
+  width:58px;height:58px;border-radius:50%;border:0;cursor:pointer;
+  background:linear-gradient(135deg,#10b981,#059669);color:#fff;
+  font-size:1.5rem;box-shadow:0 10px 30px rgba(16,185,129,.45);
+  display:grid;place-items:center;transition:transform .2s ease;
+">📝</button>
+
+<!-- 4. NOTICES PANEL (opens from bell) -->
+<div id="noticesPanel" style="
+  position:fixed;inset:0;z-index:10002;display:none;
+  align-items:flex-start;justify-content:center;padding:70px 16px 16px;
+  background:rgba(15,23,42,.55);backdrop-filter:blur(8px);
+">
+  <div style="
+    width:100%;max-width:520px;max-height:80vh;overflow-y:auto;
+    background:#fff;border-radius:20px;padding:22px;
+    box-shadow:0 24px 70px rgba(0,0,0,.35);
+    font-family:'Segoe UI',system-ui,sans-serif;
+    animation:noticePop .32s cubic-bezier(.2,1.4,.5,1);
+  ">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <div>
+        <div style="font-size:1.1rem;font-weight:800;color:#1e293b;">🔔 Notifications</div>
+        <div style="font-size:.72rem;color:#64748b;margin-top:2px;" id="panelSubtitle">Loading...</div>
+      </div>
+      <div style="display:flex;gap:6px;">
+        <button id="markAllRead" style="background:#eff6ff;border:0;color:#1e40af;
+          padding:7px 12px;border-radius:9px;font-size:.72rem;font-weight:700;cursor:pointer;">✓ Mark All Read</button>
+        <button id="noticesPanelClose" style="background:#f1f5f9;border:0;width:34px;height:34px;
+          border-radius:50%;cursor:pointer;font-size:1rem;color:#64748b;">✕</button>
+      </div>
+    </div>
+    <div id="panelList"></div>
+  </div>
+</div>
+
+<!-- 5. WRITE NOTICE MODAL -->
+<div id="noticeModal" style="
+  position:fixed;inset:0;z-index:10003;display:none;
+  align-items:center;justify-content:center;padding:16px;
+  background:rgba(15,23,42,.6);backdrop-filter:blur(8px);
+">
+  <div style="
+    width:100%;max-width:520px;max-height:92vh;overflow-y:auto;
+    background:#fff;border-radius:20px;padding:26px 24px 22px;
+    box-shadow:0 24px 70px rgba(0,0,0,.35);
+    font-family:'Segoe UI',system-ui,sans-serif;
+    animation:noticePop .3s cubic-bezier(.2,1.4,.5,1);
+  ">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
+      <div>
+        <div style="font-size:1.2rem;font-weight:800;color:#1e293b;">📢 Likho Notice</div>
+        <div style="font-size:.72rem;color:#64748b;margin-top:2px;">Sabhi teachers ko turant dikhega</div>
+      </div>
+      <button id="noticeModalClose" style="background:#f1f5f9;border:0;width:36px;height:36px;
+        border-radius:50%;cursor:pointer;font-size:1rem;color:#64748b;">✕</button>
+    </div>
+
+    <div style="margin-bottom:14px;">
+      <label style="display:block;font-size:.72rem;font-weight:700;color:#475569;letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px;">Title</label>
+      <input id="nTitle" type="text" placeholder="e.g. Exam Update" maxlength="40" style="
+        width:100%;padding:12px 14px;border:2px solid #e2e8f0;border-radius:12px;
+        font-size:.95rem;font-family:inherit;color:#1e293b;outline:none;background:#f8fafc;">
+    </div>
+
+    <div style="margin-bottom:14px;">
+      <label style="display:block;font-size:.72rem;font-weight:700;color:#475569;letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px;">Message</label>
+      <textarea id="nText" rows="3" placeholder="Type your notice here..." maxlength="250" style="
+        width:100%;padding:12px 14px;border:2px solid #e2e8f0;border-radius:12px;
+        font-size:.95rem;font-family:inherit;color:#1e293b;outline:none;background:#f8fafc;resize:vertical;"></textarea>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+      <div>
+        <label style="display:block;font-size:.72rem;font-weight:700;color:#475569;letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px;">Type</label>
+        <select id="nType" style="width:100%;padding:12px 14px;border:2px solid #e2e8f0;border-radius:12px;
+          font-size:.9rem;font-family:inherit;color:#1e293b;outline:none;background:#f8fafc;cursor:pointer;">
+          <option value="info">📢 Info</option>
+          <option value="success">✅ Success</option>
+          <option value="warning">⚠️ Warning</option>
+          <option value="urgent">🚨 Urgent</option>
+        </select>
+      </div>
+      <div>
+        <label style="display:block;font-size:.72rem;font-weight:700;color:#475569;letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px;">Duration</label>
+        <select id="nDuration" style="width:100%;padding:12px 14px;border:2px solid #e2e8f0;border-radius:12px;
+          font-size:.9rem;font-family:inherit;color:#1e293b;outline:none;background:#f8fafc;cursor:pointer;">
+          <option value="5000">5 seconds</option>
+          <option value="8000" selected>8 seconds</option>
+          <option value="10000">10 seconds</option>
+          <option value="15000">15 seconds</option>
+        </select>
+      </div>
+    </div>
+
+    <button id="nSubmit" style="
+      width:100%;padding:14px;border:0;border-radius:13px;
+      background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;
+      font-family:inherit;font-size:.95rem;font-weight:800;letter-spacing:1px;
+      text-transform:uppercase;cursor:pointer;box-shadow:0 10px 24px rgba(245,158,11,.35);">📤 Send Notice</button>
+  </div>
+</div>
+
+<style>
+  @keyframes noticePop { from{transform:scale(.9);opacity:0;} to{transform:scale(1);opacity:1;} }
+  @keyframes badgePop { from{transform:scale(0);} to{transform:scale(1);} }
+  @keyframes noticeShine {
+    0% { transform:translateX(-120%); }
+    60%, 100% { transform:translateX(120%); }
+  }
+  @keyframes noticeBellPulse {
+    0%, 100% { transform:scale(1); }
+    50% { transform:scale(1.12); }
+  }
+  @keyframes bellRing {
+    0%, 100% { transform:rotate(0); }
+    20% { transform:rotate(-16deg); }
+    40% { transform:rotate(16deg); }
+    60% { transform:rotate(-10deg); }
+    80% { transform:rotate(10deg); }
+  }
+  @keyframes bellGlow {
+    0%, 100% { box-shadow:0 6px 20px rgba(245,158,11,.4); }
+    50% { box-shadow:0 6px 30px rgba(239,68,68,.75), 0 0 0 6px rgba(239,68,68,.15); }
+  }
+
+  #noticeClose:hover { background:rgba(255,255,255,.35) !important; }
+  #noticeFab:hover { transform:scale(1.1) rotate(8deg); }
+  #noticeFab:active { transform:scale(.95); }
+  #noticeBell:hover { transform:scale(1.08); }
+
+  /* bell has new notices */
+  #noticeBell.has-new { animation:bellGlow 1.6s ease-in-out infinite; }
+  #noticeBell.has-new #bellIcon { animation:bellRing 1.2s ease-in-out infinite; display:inline-block; }
+
+  #noticeBar[data-type="success"] #noticeInner { background:linear-gradient(135deg,#10b981,#059669); box-shadow:0 12px 40px rgba(16,185,129,.4); }
+  #noticeBar[data-type="warning"] #noticeInner { background:linear-gradient(135deg,#f59e0b,#d97706); box-shadow:0 12px 40px rgba(245,158,11,.4); }
+  #noticeBar[data-type="urgent"]  #noticeInner { background:linear-gradient(135deg,#ef4444,#b91c1c); box-shadow:0 12px 40px rgba(239,68,68,.5); }
+  #noticeBar.show { transform:translateY(0); opacity:1; pointer-events:auto; }
+
+  /* Dark theme */
+  html[data-theme="dark"] #noticeModal > div,
+  html[data-theme="dark"] #noticesPanel > div { background:#132a54 !important; color:#eaf1ff !important; border:1px solid rgba(255,255,255,.14); }
+  html[data-theme="dark"] #noticeModal div[style*="color:#1e293b"],
+  html[data-theme="dark"] #noticesPanel div[style*="color:#1e293b"] { color:#eaf1ff !important; }
+  html[data-theme="dark"] #noticeModal div[style*="color:#475569"],
+  html[data-theme="dark"] #noticeModal div[style*="color:#64748b"],
+  html[data-theme="dark"] #noticesPanel div[style*="color:#64748b"] { color:#9fb3d1 !important; }
+  html[data-theme="dark"] #noticeModal input,
+  html[data-theme="dark"] #noticeModal textarea,
+  html[data-theme="dark"] #noticeModal select {
+    background:rgba(0,0,0,.28) !important; color:#eaf1ff !important; border-color:rgba(255,255,255,.18) !important;
+  }
+  html[data-theme="dark"] #noticeModal input::placeholder,
+  html[data-theme="dark"] #noticeModal textarea::placeholder { color:#7f93b3 !important; }
+  html[data-theme="dark"] #noticeModalClose,
+  html[data-theme="dark"] #noticesPanelClose { background:rgba(255,255,255,.1) !important; color:#9fb3d1 !important; }
+  html[data-theme="dark"] #markAllRead { background:rgba(59,130,246,.2) !important; color:#bfdbfe !important; }
+  html[data-theme="dark"] #panelList > div { background:rgba(255,255,255,.04) !important; border-color:rgba(255,255,255,.12) !important; }
+  html[data-theme="dark"] #panelList div[style*="color:#1e293b"] { color:#eaf1ff !important; }
+  html[data-theme="dark"] #panelList div[style*="color:#64748b"] { color:#9fb3d1 !important; }
+  html[data-theme="dark"] #panelList div[style*="color:#94a3b8"] { color:#7f93b3 !important; }
+
+  @media (max-width:520px){
+    #noticeInner { margin:10px; padding:12px 14px; gap:10px; }
+    #noticeIcon { flex:0 0 38px; width:38px; height:38px; font-size:1.25rem; }
+    #noticeText { font-size:.88rem; }
+    #noticeFab { bottom:14px; right:14px; width:52px; height:52px; font-size:1.35rem; }
+    #noticeBell { right:70px; width:44px; height:44px; font-size:1.1rem; }
+    #noticeCount { display:none; }
+  }
+</style>
+
+<script>
+/* ============================================================
+   NOTICE BOARD v2 — Bell + Badge + Animated Banner
+   ============================================================ */
+(function(){
+  const STORAGE_NOTICES = 'edutrack_notices';
+  const STORAGE_SEEN    = 'edutrack_notices_seen';
+  const STORAGE_SESSION = 'edutrack_session';
+
+  // ---------- helpers ----------
+  function getNotices(){
+    try { return JSON.parse(localStorage.getItem(STORAGE_NOTICES) || '[]'); }
+    catch(e){ return []; }
+  }
+  function saveNotices(list){
+    while (list.length > 30) list.shift();
+    try { localStorage.setItem(STORAGE_NOTICES, JSON.stringify(list)); } catch(e){}
+  }
+  function getSeen(){
+    try { return JSON.parse(localStorage.getItem(STORAGE_SEEN) || '[]'); }
+    catch(e){ return []; }
+  }
+  function addSeen(id){
+    const seen = getSeen();
+    if (!seen.includes(id)) {
+      seen.push(id);
+      while (seen.length > 100) seen.shift();
+      try { localStorage.setItem(STORAGE_SEEN, JSON.stringify(seen)); } catch(e){}
+    }
+  }
+  function markAllSeen(){
+    const all = getNotices().map(n => n.id);
+    try { localStorage.setItem(STORAGE_SEEN, JSON.stringify(all)); } catch(e){}
+    updateBadge();
+  }
+  function hasSeen(id){ return getSeen().includes(id); }
+
+  function getUnseenCount(){
+    const seen = getSeen();
+    return getNotices().filter(n => !seen.includes(n.id)).length;
+  }
+
+  function getCurrentUser(){
+    try { return JSON.parse(localStorage.getItem(STORAGE_SESSION) || 'null'); }
+    catch(e){ return null; }
+  }
+  function formatNow(d){
+    d = d || new Date();
+    return d.toLocaleString('en-IN', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit', hour12:true });
+  }
+  function escapeHTML(s){
+    return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  const ICONS = { info:'📢', success:'✅', warning:'⚠️', urgent:'🚨' };
+  const COLORS = { info:'#3b82f6', success:'#10b981', warning:'#f59e0b', urgent:'#ef4444' };
+
+  // ---------- BADGE ----------
+  function updateBadge(){
+    const bell = document.getElementById('noticeBell');
+    const badge = document.getElementById('bellBadge');
+    if (!bell || !badge) return;
+
+    const count = getUnseenCount();
+    if (count > 0) {
+      badge.style.display = 'block';
+      badge.textContent = count > 99 ? '99+' : String(count);
+      bell.classList.add('has-new');
+    } else {
+      badge.style.display = 'none';
+      bell.classList.remove('has-new');
+    }
+  }
+
+  // ---------- BANNER ----------
+  window.showNotice = function(opts){
+    opts = opts || {};
+    const id = opts.id || ('notice_' + Date.now());
+    const type = opts.type || 'info';
+    const duration = opts.duration || 8000;
+
+    if (!opts.force && hasSeen(id)) return;
+
+    const bar = document.getElementById('noticeBar');
+    if (!bar) return;
+
+    bar.setAttribute('data-type', type);
+    document.getElementById('noticeIcon').textContent = ICONS[type] || '📢';
+    document.getElementById('noticeTitle').textContent = opts.title || 'Notice';
+    document.getElementById('noticeText').textContent = opts.text || '';
+    document.getElementById('noticeTime').textContent =
+      (opts.author ? '— ' + opts.author + ' • ' : '') + (opts.time || formatNow());
+
+    // Count of other unseen notices
+    const total = getUnseenCount();
+    const countEl = document.getElementById('noticeCount');
+    if (total > 1) {
+      countEl.textContent = '+' + (total - 1) + ' more';
+      countEl.style.display = 'inline-block';
+    } else {
+      countEl.style.display = 'none';
+    }
+
+    // Slide-in
+    setTimeout(() => bar.classList.add('show'), 120);
+
+    if (bar._timer) clearTimeout(bar._timer);
+    bar._timer = setTimeout(() => hideNotice(), duration);
+
+    addSeen(id);
+    updateBadge();
+  };
+
+  window.hideNotice = function(){
+    const bar = document.getElementById('noticeBar');
+    if (!bar) return;
+    bar.classList.remove('show');
+    if (bar._timer) { clearTimeout(bar._timer); bar._timer = null; }
+  };
+
+  // ---------- AUTO SHOW on load ----------
+  function autoShowPending(){
+    const notices = getNotices();
+    const unseen = notices.filter(n => !hasSeen(n.id));
+    if (unseen.length === 0) return;
+
+    unseen.sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt));
+
+    let i = 0;
+    function next(){
+      if (i >= unseen.length) return;
+      const n = unseen[i++];
+      showNotice({
+        id: n.id, title: n.title, text: n.text,
+        type: n.type, duration: n.duration,
+        author: n.author, time: n.time
+      });
+      setTimeout(next, (n.duration || 8000) + 1200);
+    }
+    next();
+  }
+
+  // ---------- PANEL (list of notices) ----------
+  function openPanel(){
+    const p = document.getElementById('noticesPanel');
+    if (!p) return;
+    p.style.display = 'flex';
+    renderPanel();
+  }
+  function closePanel(){
+    const p = document.getElementById('noticesPanel');
+    if (p) p.style.display = 'none';
+  }
+  function renderPanel(){
+    const all = getNotices().slice().reverse();
+    const seen = getSeen();
+    const unseenCount = all.filter(n => !seen.includes(n.id)).length;
+
+    document.getElementById('panelSubtitle').textContent =
+      unseenCount > 0
+        ? unseenCount + ' naye notice' + (unseenCount > 1 ? 's' : '') + ' • total ' + all.length
+        : 'Sab read ✓ • total ' + all.length;
+
+    const box = document.getElementById('panelList');
+    if (all.length === 0) {
+      box.innerHTML = '<div style="text-align:center;padding:24px;font-size:.85rem;color:#94a3b8;">Abhi koi notice nahi hai</div>';
+      return;
+    }
+
+    box.innerHTML = all.map(n => {
+      const isUnseen = !seen.includes(n.id);
+      return `
+        <div data-id="${n.id}" style="display:flex;align-items:flex-start;gap:12px;
+          padding:12px;border:1px solid #e2e8f0;border-radius:12px;margin-bottom:8px;
+          background:${isUnseen ? '#fef3c7' : '#f8fafc'};
+          border-left:4px solid ${COLORS[n.type]};
+          position:relative;">
+          <div style="flex:0 0 34px;width:34px;height:34px;border-radius:50%;
+            display:grid;place-items:center;background:${COLORS[n.type]}22;font-size:1.05rem;">
+            ${ICONS[n.type]}
+          </div>
+          <div style="flex:1;min-width:0;">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div style="font-size:.9rem;font-weight:800;color:#1e293b;">${escapeHTML(n.title)}</div>
+              ${isUnseen ? '<span style="background:#ef4444;color:#fff;font-size:.55rem;font-weight:800;padding:2px 6px;border-radius:99px;letter-spacing:.5px;">NEW</span>' : ''}
+            </div>
+            <div style="font-size:.78rem;color:#475569;margin-top:3px;line-height:1.4;">${escapeHTML(n.text)}</div>
+            <div style="font-size:.68rem;color:#94a3b8;margin-top:5px;">${escapeHTML(n.author)} • ${n.time}</div>
+          </div>
+          <button class="noticeDelBtn" data-id="${n.id}" title="Delete"
+            style="background:#fee2e2;border:0;color:#dc2626;width:28px;height:28px;
+            border-radius:50%;cursor:pointer;font-size:.75rem;font-weight:700;flex-shrink:0;">✕</button>
+        </div>`;
+    }).join('');
+
+    // mark each as seen as user views the list
+    box.querySelectorAll('.noticeDelBtn').forEach(btn => {
+      btn.addEventListener('click', function(e){
+        e.stopPropagation();
+        const id = this.getAttribute('data-id');
+        if (!confirm('Delete this notice?')) return;
+        saveNotices(getNotices().filter(x => x.id !== id));
+        renderPanel();
+        updateBadge();
+      });
+    });
+  }
+
+  function markVisibleAsSeen(){
+    // when panel is opened, mark all currently listed as seen
+    getNotices().forEach(n => addSeen(n.id));
+    updateBadge();
+  }
+
+  // ---------- WRITE MODAL ----------
+  function openWriteModal(){
+    const m = document.getElementById('noticeModal');
+    if (!m) return;
+    m.style.display = 'flex';
+    document.getElementById('nTitle').value = '';
+    document.getElementById('nText').value = '';
+    document.getElementById('nType').value = 'info';
+    document.getElementById('nDuration').value = '8000';
+    setTimeout(() => document.getElementById('nTitle').focus(), 100);
+  }
+  function closeWriteModal(){
+    const m = document.getElementById('noticeModal');
+    if (m) m.style.display = 'none';
+  }
+
+  function submitNotice(){
+    const title = document.getElementById('nTitle').value.trim();
+    const text  = document.getElementById('nText').value.trim();
+    const type  = document.getElementById('nType').value;
+    const duration = parseInt(document.getElementById('nDuration').value) || 8000;
+
+    if (!title) { alert('Please enter a title'); return; }
+    if (!text)  { alert('Please enter a message'); return; }
+
+    const user = getCurrentUser();
+    const now = new Date();
+    const notice = {
+      id: 'notice_' + now.getTime() + '_' + Math.random().toString(36).slice(2,6),
+      title, text, type, duration,
+      author: user ? user.name : 'Anonymous',
+      time: formatNow(now),
+      createdAt: now.toISOString()
+    };
+
+    const list = getNotices();
+    list.push(notice);
+    saveNotices(list);
+
+    closeWriteModal();
+
+    // show immediately (force), and update badge
+    setTimeout(() => {
+      showNotice({
+        id: notice.id, title: notice.title, text: notice.text,
+        type: notice.type, duration: notice.duration,
+        author: notice.author, time: notice.time, force: true
+      });
+    }, 300);
+  }
+
+  // ---------- WIRE UP ----------
+  document.addEventListener('DOMContentLoaded', function(){
+    // Bell
+    const bell = document.getElementById('noticeBell');
+    if (bell) {
+      bell.addEventListener('click', function(){
+        openPanel();
+        setTimeout(markVisibleAsSeen, 800);
+      });
+    }
+
+    // Banner close
+    const closeBtn = document.getElementById('noticeClose');
+    if (closeBtn) closeBtn.addEventListener('click', hideNotice);
+
+    // Panel
+    const pClose = document.getElementById('noticesPanelClose');
+    if (pClose) pClose.addEventListener('click', closePanel);
+
+    const pBackdrop = document.getElementById('noticesPanel');
+    if (pBackdrop) pBackdrop.addEventListener('click', function(e){
+      if (e.target === pBackdrop) closePanel();
+    });
+
+    const mAll = document.getElementById('markAllRead');
+    if (mAll) mAll.addEventListener('click', function(){
+      markAllSeen();
+      renderPanel();
+    });
+
+    // FAB
+    const fab = document.getElementById('noticeFab');
+    if (fab) fab.addEventListener('click', openWriteModal);
+
+    // Write modal
+    const wClose = document.getElementById('noticeModalClose');
+    if (wClose) wClose.addEventListener('click', closeWriteModal);
+
+    const wBackdrop = document.getElementById('noticeModal');
+    if (wBackdrop) wBackdrop.addEventListener('click', function(e){
+      if (e.target === wBackdrop) closeWriteModal();
+    });
+
+    const submit = document.getElementById('nSubmit');
+    if (submit) submit.addEventListener('click', submitNotice);
+
+    // Escape key
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape') {
+        closeWriteModal();
+        closePanel();
+      }
+    });
+
+    // Initial badge update
+    updateBadge();
+
+    // Auto-show pending notices
+    setTimeout(autoShowPending, 1000);
+  });
+
+  // Expose for console testing
+  window.__notices = { getNotices, saveNotices, getSeen, hasSeen, getUnseenCount, updateBadge };
+})();
+</script>
+</body>
+</html>
