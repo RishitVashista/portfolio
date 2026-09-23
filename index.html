@@ -1,80 +1,304 @@
  <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rishit Vashist | Portfolio</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rishit Vashist | Software Developer</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-  <header>
-    <nav>
-      <h1 class="logo">Rishit.dev</h1>
-      <ul>
-        <li><a href="#about">About</a></li>
-        <li><a href="#skills">Skills</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#home" class="logo">&lt;Rishit /&gt;</a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
     </nav>
-  </header>
 
-  <section class="hero">
-    <h2>Hi, I'm <span>Rishit Vashist</span> 👋</h2>
-    <p>Aspiring Software Developer | B.Tech CSE (AI) Student</p>
-    <a href="#projects" class="btn">See My Work</a>
-  </section>
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <p class="greeting">👋 Hello, I'm</p>
+            <h1 class="hero-title">Rishit Vashist</h1>
+            <h2 class="hero-subtitle">I build things for the web & solve problems with code.</h2>
+            <p class="hero-desc">
+                B.Tech CSE (AI) student passionate about <span class="highlight">Software Development</span>, 
+                <span class="highlight">DSA</span>, and building real-world projects.
+            </p>
+            <div class="hero-buttons">
+                <a href="#projects" class="btn btn-primary">View My Work <i class="fas fa-arrow-right"></i></a>
+                <a href="https://github.com/RishitVashista" target="_blank" class="btn btn-outline">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+            </div>
+            <div class="social-links">
+                <a href="https://github.com/RishitVashista" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+                <a href="https://www.linkedin.com/in/rishit-vashist-704410383" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                <a href="mailto:rishitvashist414@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span>Scroll</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
 
-  <section id="about">
-    <h2>About Me</h2>
-    <p>I'm passionate about problem solving and building efficient solutions. Currently mastering Data Structures & Algorithms in C++ while exploring web development to build real-world projects. My goal is to become a Software Development Engineer (SDE).</p>
-  </section>
+    <!-- About Section -->
+    <section id="about" class="section">
+        <div class="container">
+            <h2 class="section-title"><span class="num">01.</span> About Me</h2>
+            <div class="about-grid">
+                <div class="about-text">
+                    <p>
+                        I'm a <strong>B.Tech CSE (AI) student</strong> who loves turning ideas into working code. 
+                        My journey started with curiosity about how things work — now I'm building them.
+                    </p>
+                    <p>
+                        I'm currently <strong>mastering Data Structures & Algorithms in C++</strong>, 
+                        solving problems daily on LeetCode and GeeksforGeeks. Alongside, I'm exploring 
+                        <strong>web development</strong> to build projects that actually help people.
+                    </p>
+                    <p>
+                        My goal? Become a <strong>Software Development Engineer (SDE)</strong> at a product-based company 
+                        and build scalable, impactful software.
+                    </p>
+                    <div class="about-stats">
+                        <div class="stat">
+                            <h3>100+</h3>
+                            <p>DSA Problems</p>
+                        </div>
+                        <div class="stat">
+                            <h3>3+</h3>
+                            <p>Projects Built</p>
+                        </div>
+                        <div class="stat">
+                            <h3>5+</h3>
+                            <p>Technologies</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <div class="image-wrapper">
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="dot red"></span>
+                                <span class="dot yellow"></span>
+                                <span class="dot green"></span>
+                                <span class="code-title">about_me.cpp</span>
+                            </div>
+                            <pre><code><span class="kw">class</span> <span class="cls">Rishit</span> {
+<span class="kw">public</span>:
+  <span class="type">string</span> name = <span class="str">"Rishit Vashist"</span>;
+  <span class="type">string</span> role = <span class="str">"Aspiring SDE"</span>;
+  <span class="type">string</span> skills[] = {
+    <span class="str">"C++"</span>, <span class="str">"DSA"</span>, <span class="str">"Python"</span>,
+    <span class="str">"HTML"</span>, <span class="str">"CSS"</span>, <span class="str">"JS"</span>
+  };
+  
+  <span class="type">void</span> <span class="fn">goal</span>() {
+    <span class="cmt">// Build. Learn. Repeat.</span>
+    build(<span class="str">"impactful projects"</span>);
+  }
+};</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <section id="skills">
-    <h2>Skills</h2>
-    <div class="skills-grid">
-      <div class="skill">C++</div>
-      <div class="skill">C</div>
-      <div class="skill">Python</div>
-      <div class="skill">HTML</div>
-      <div class="skill">CSS</div>
-      <div class="skill">JavaScript</div>
-      <div class="skill">DSA</div>
-      <div class="skill">Git & GitHub</div>
-    </div>
-  </section>
+    <!-- Skills Section -->
+    <section id="skills" class="section">
+        <div class="container">
+            <h2 class="section-title"><span class="num">02.</span> Skills & Technologies</h2>
+            <div class="skills-container">
+                <div class="skill-category">
+                    <h3><i class="fas fa-code"></i> Languages</h3>
+                    <div class="skill-tags">
+                        <span class="tag">C++</span>
+                        <span class="tag">C</span>
+                        <span class="tag">Python</span>
+                        <span class="tag">JavaScript</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3><i class="fas fa-laptop-code"></i> Web Development</h3>
+                    <div class="skill-tags">
+                        <span class="tag">HTML5</span>
+                        <span class="tag">CSS3</span>
+                        <span class="tag">JavaScript</span>
+                        <span class="tag">Responsive Design</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3><i class="fas fa-brain"></i> Core CS</h3>
+                    <div class="skill-tags">
+                        <span class="tag">Data Structures</span>
+                        <span class="tag">Algorithms</span>
+                        <span class="tag">OOP</span>
+                        <span class="tag">Problem Solving</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3><i class="fas fa-tools"></i> Tools</h3>
+                    <div class="skill-tags">
+                        <span class="tag">Git</span>
+                        <span class="tag">GitHub</span>
+                        <span class="tag">VS Code</span>
+                        <span class="tag">Linux</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <section id="projects">
-    <h2>Projects</h2>
-    <div class="projects-grid">
-      <div class="project">
-        <h3>DSA Solutions</h3>
-        <p>Daily LeetCode & GeeksforGeeks solutions in C++.</p>
-        <a href="https://github.com/RishitVashista">GitHub</a>
-        
-      </div>
-      <div class="project">
-        <h3>Portfolio Website</h3>
-        <p>Personal portfolio built with HTML, CSS, and JavaScript.</p>
-        <a href="#">Live Demo</a>
-      </div>
-    </div>
-  </section>
+    <!-- Projects Section -->
+    <section id="projects" class="section">
+        <div class="container">
+            <h2 class="section-title"><span class="num">03.</span> Projects</h2>
+            <p class="section-subtitle">Some things I've built and worked on</p>
+            
+            <div class="projects-grid">
+                
+                <!-- Project 1 -->
+                <div class="project-card featured">
+                    <div class="project-header">
+                        <i class="fas fa-folder-open folder-icon"></i>
+                        <div class="project-links">
+                            <a href="https://github.com/RishitVashista/DSA-in-CPP" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                    <h3 class="project-title">DSA Solutions in C++</h3>
+                    <p class="project-desc">
+                        A curated collection of Data Structures & Algorithms solutions from LeetCode, 
+                        GeeksforGeeks, and CodeStudio — organized topic-wise for easy reference and revision.
+                    </p>
+                    <div class="project-tech">
+                        <span>C++</span>
+                        <span>STL</span>
+                        <span>DSA</span>
+                    </div>
+                </div>
 
-  <section id="contact">
-    <h2>Contact</h2>
-    <p>📧 rishitvashist414@gmail.com</p>
-    <p>📞 +91 7650040133</p>
-    <p>
-      🔗 <a href="https://www.linkedin.com/in/rishit-vashist-704410383">LinkedIn</a> | 
-      <a href="https://github.com/RishitVashista">GitHub</a>
-    </p>
-  </section>
+                <!-- Project 2 -->
+                <div class="project-card featured">
+                    <div class="project-header">
+                        <i class="fas fa-folder-open folder-icon"></i>
+                        <div class="project-links">
+                            <a href="https://RishitVashista.github.io/portfolio" target="_blank" title="Live Demo"><i class="fas fa-external-link-alt"></i></a>
+                            <a href="https://github.com/RishitVashista/portfolio" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                    <h3 class="project-title">Portfolio Website</h3>
+                    <p class="project-desc">
+                        A modern, responsive personal portfolio built from scratch with pure HTML, CSS, 
+                        and JavaScript. Features smooth animations and a clean developer-focused design.
+                    </p>
+                    <div class="project-tech">
+                        <span>HTML5</span>
+                        <span>CSS3</span>
+                        <span>JavaScript</span>
+                    </div>
+                </div>
 
-  <footer>
-    <p>© 2025 Rishit Vashist. Built with ❤️</p>
-  </footer>
+                <!-- Project 3 -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <i class="fas fa-folder-open folder-icon"></i>
+                        <div class="project-links">
+                            <a href="https://github.com/RishitVashista" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                    <h3 class="project-title">Coming Soon...</h3>
+                    <p class="project-desc">
+                        Currently working on new projects. Stay tuned for more cool stuff!
+                    </p>
+                    <div class="project-tech">
+                        <span>🚧 In Progress</span>
+                    </div>
+                </div>
 
-  <script src="script.js"></script>
+            </div>
+
+            <div class="view-more">
+                <a href="https://github.com/RishitVashista?tab=repositories" target="_blank" class="btn btn-outline">
+                    View All on GitHub <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Coding Profiles Section -->
+    <section class="section coding-section">
+        <div class="container">
+            <h2 class="section-title"><span class="num">04.</span> Coding Profiles</h2>
+            <div class="profiles-grid">
+                <a href="https://github.com/RishitVashista" target="_blank" class="profile-card">
+                    <i class="fab fa-github"></i>
+                    <h3>GitHub</h3>
+                    <p>Check out my projects</p>
+                </a>
+                <a href="https://leetcode.com/" target="_blank" class="profile-card">
+                    <i class="fas fa-code"></i>
+                    <h3>LeetCode</h3>
+                    <p>Problem solving daily</p>
+                </a>
+                <a href="https://www.linkedin.com/in/rishit-vashist-704410383" target="_blank" class="profile-card">
+                    <i class="fab fa-linkedin"></i>
+                    <h3>LinkedIn</h3>
+                    <p>Let's connect</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section">
+        <div class="container">
+            <h2 class="section-title"><span class="num">05.</span> Get In Touch</h2>
+            <div class="contact-content">
+                <p class="contact-text">
+                    I'm currently looking for <strong>internship opportunities</strong> and open to 
+                    collaborating on interesting projects. Whether you have a question or just want 
+                    to say hi — my inbox is always open!
+                </p>
+                <a href="mailto:rishitvashist414@gmail.com" class="btn btn-primary big-btn">
+                    <i class="fas fa-paper-plane"></i> Say Hello
+                </a>
+                <div class="contact-info">
+                    <p><i class="fas fa-envelope"></i> rishitvashist414@gmail.com</p>
+                    <p><i class="fas fa-phone"></i> +91 7650040133</p>
+                    <p><i class="fas fa-map-marker-alt"></i> India</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-social">
+                <a href="https://github.com/RishitVashista" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="https://www.linkedin.com/in/rishit-vashist-704410383" target="_blank"><i class="fab fa-linkedin"></i></a>
+                <a href="mailto:rishitvashist414@gmail.com"><i class="fas fa-envelope"></i></a>
+            </div>
+            <p>Designed & Built by <span class="highlight">Rishit Vashist</span></p>
+            <p class="copyright">© 2025 Rishit Vashist. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
