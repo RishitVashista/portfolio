@@ -1,0 +1,594 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Daily Report — Rishit Vashist</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: linear-gradient(135deg, #f0fdf4 0%, #f8fafc 50%, #eff6ff 100%);
+      min-height: 100vh;
+      color: #0f172a;
+      padding: 2rem 1rem 4rem;
+      line-height: 1.6;
+    }
+    .container { max-width: 640px; margin: 0 auto; }
+
+    nav { margin-bottom: 2rem; display: flex; gap: 1.5rem; }
+    nav a { color: #64748b; text-decoration: none; font-size: 0.875rem; font-weight: 500; transition: color 0.2s; }
+    nav a:hover { color: #0f172a; }
+    nav a.active { color: #16a34a; }
+
+    header { margin-bottom: 1.75rem; }
+    h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #16a34a, #0891b2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.25rem;
+    }
+    .subtitle { color: #64748b; font-size: 0.95rem; }
+
+    .stats-row { display: flex; gap: 0.75rem; margin-bottom: 1.5rem; }
+    .stat-card {
+      flex: 1;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 1rem 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    }
+    .stat-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #94a3b8;
+      font-weight: 600;
+    }
+    .stat-value { font-size: 1.6rem; font-weight: 700; color: #0f172a; line-height: 1.2; }
+
+    .calendar-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 1.25rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 8px 24px -8px rgba(0,0,0,0.06);
+      margin-bottom: 1.5rem;
+    }
+    .month-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding: 0 0.25rem;
+    }
+    .month-label { font-weight: 700; font-size: 1.05rem; color: #0f172a; }
+    .month-count { font-size: 0.8rem; color: #64748b; font-weight: 500; }
+
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+    }
+    .weekday {
+      text-align: center;
+      font-size: 0.65rem;
+      color: #94a3b8;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.4rem 0;
+    }
+    .day {
+      aspect-ratio: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      cursor: pointer;
+      background: #f8fafc;
+      border: 1px solid transparent;
+      transition: all 0.15s ease;
+      user-select: none;
+      gap: 1px;
+    }
+    .day.empty { background: transparent; cursor: default; }
+    .day.future { opacity: 0.35; cursor: not-allowed; }
+    .day:not(.empty):not(.future):hover {
+      transform: translateY(-1px);
+      border-color: #cbd5e1;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+    .day.done {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: white;
+      border-color: #16a34a;
+    }
+    .day.done:hover { box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3); }
+    .day.today { outline: 2px solid #16a34a; outline-offset: 2px; }
+    .day .num { font-size: 0.85rem; font-weight: 600; }
+    .day .tick { font-size: 0.6rem; line-height: 1; font-weight: 800; }
+
+    .panel {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 8px 24px -8px rgba(0,0,0,0.06);
+      min-height: 120px;
+    }
+    .panel h3 { font-size: 1rem; font-weight: 700; margin-bottom: 1rem; color: #0f172a; }
+    .panel textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: 0.9rem;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 10px;
+      font: inherit;
+      font-size: 0.95rem;
+      resize: vertical;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      line-height: 1.5;
+    }
+    .panel textarea:focus {
+      outline: none;
+      border-color: #22c55e;
+      box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+    }
+    .panel textarea[readonly] { background: #f8fafc; color: #475569; cursor: default; }
+
+    .pin-form { display: flex; gap: 0.5rem; margin-bottom: 0.75rem; }
+    .pin-input {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 10px;
+      font: inherit;
+      font-size: 0.95rem;
+      letter-spacing: 0.15em;
+      text-align: center;
+      font-weight: 600;
+      transition: border-color 0.15s;
+    }
+    .pin-input:focus { outline: none; border-color: #22c55e; }
+    .pin-btn {
+      background: #0f172a;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.15s;
+    }
+    .pin-btn:hover { background: #1e293b; }
+    .pin-hint { color: #94a3b8; font-size: 0.8rem; }
+
+    .save-btn {
+      margin-top: 0.9rem;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: white;
+      border: none;
+      padding: 0.7rem 1.5rem;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: transform 0.1s, box-shadow 0.15s;
+      box-shadow: 0 2px 4px rgba(22, 163, 74, 0.2);
+    }
+    .save-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3); }
+    .save-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .status { margin-left: 0.75rem; font-size: 0.85rem; color: #64748b; }
+
+    .past-content { color: #475569; line-height: 1.7; white-space: pre-wrap; margin: 0; }
+
+    .lock-badge {
+      display: inline-block;
+      margin-top: 1rem;
+      font-size: 0.75rem;
+      color: #64748b;
+      background: #f1f5f9;
+      padding: 0.35rem 0.7rem;
+      border-radius: 6px;
+      font-weight: 500;
+    }
+
+    .empty-panel { color: #94a3b8; text-align: center; padding: 1.5rem; font-size: 0.9rem; }
+
+    .footer-bar { margin-top: 1.5rem; text-align: center; }
+    .footer-bar button {
+      color: #94a3b8;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-decoration: underline;
+      font-size: 0.8rem;
+      font-family: inherit;
+    }
+    .footer-bar button:hover { color: #64748b; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="projects.html">Projects</a>
+      <a href="updates.html" class="active">Updates</a>
+    </nav>
+
+    <header>
+      <h1>Daily Report</h1>
+      <p class="subtitle">A day-by-day log of what I'm building.</p>
+    </header>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <span class="stat-label">Current Streak</span>
+        <span class="stat-value" id="streakValue">0</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Total Days</span>
+        <span class="stat-value" id="totalValue">0</span>
+      </div>
+    </div>
+
+    <div class="calendar-card">
+      <div class="month-header">
+        <span class="month-label" id="monthLabel"></span>
+        <span class="month-count" id="monthCount"></span>
+      </div>
+      <div class="calendar" id="calendar"></div>
+    </div>
+
+    <div class="panel" id="panel">
+      <p class="empty-panel">Click any date to view or edit</p>
+    </div>
+
+    <div class="footer-bar" id="footerBar"></div>
+
+  </div>
+
+  <script>
+    // ═══════════════════════════════════════════════════
+    //  Change this if you ever want a different PIN
+    // ═══════════════════════════════════════════════════
+    var PIN_CODE = '0007';
+
+    var SUPABASE_URL = 'https://qzdxemghuzbswucddioq.supabase.co';
+    var SUPABASE_ANON_KEY = 'sb_publishable_4v18pmzVnfVrfnmbHxmiJw_FhXCMQu0';
+
+    var client = null;
+    var allEntries = {};
+    var today = new Date().toLocaleDateString('en-CA');
+    var UNLOCK_KEY = 'daily_report_unlocked';
+
+    var $calendar = document.getElementById('calendar');
+    var $panel = document.getElementById('panel');
+    var $monthLabel = document.getElementById('monthLabel');
+    var $monthCount = document.getElementById('monthCount');
+    var $streakValue = document.getElementById('streakValue');
+    var $totalValue = document.getElementById('totalValue');
+    var $footerBar = document.getElementById('footerBar');
+
+         function todayISO() {
+      return new Date().toLocaleDateString('en-CA');
+    }
+
+    function isUnlocked() {
+      try {
+        var raw = localStorage.getItem(UNLOCK_KEY);
+        if (!raw) return false;
+        var data = JSON.parse(raw);
+        return data.date === todayISO() && data.unlocked === true;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function setUnlocked() {
+      try {
+        localStorage.setItem(UNLOCK_KEY, JSON.stringify({
+          date: todayISO(),
+          unlocked: true
+        }));
+      } catch (e) {}
+    }
+
+    function clearUnlocked() {
+      try { localStorage.removeItem(UNLOCK_KEY); } catch (e) {}
+    }
+
+    function init() {
+      if (!window.supabase) {
+        $panel.innerHTML = '<p class="empty-panel">Failed to load. Check your internet connection.</p>';
+        return;
+      }
+      client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+      client.from('updates').select('log_date, content').then(function(res) {
+        if (res.error) {
+          $panel.innerHTML = '<p class="empty-panel">Database error: ' + res.error.message + '</p>';
+          return;
+        }
+        allEntries = {};
+        if (res.data) {
+          for (var i = 0; i < res.data.length; i++) {
+            allEntries[res.data[i].log_date] = res.data[i].content;
+          }
+        }
+        $panel.innerHTML = '<p class="empty-panel">Click any date to view or edit</p>';
+        render();
+      });
+    }
+
+    function render() {
+      renderCalendar();
+      renderStats();
+      renderFooter();
+    }
+
+    function renderCalendar() {
+      $calendar.innerHTML = '';
+
+      var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      for (var w = 0; w < 7; w++) {
+        var wd = document.createElement('div');
+        wd.className = 'weekday';
+        wd.textContent = days[w];
+        $calendar.appendChild(wd);
+      }
+
+      var now = new Date();
+      var year = now.getFullYear();
+      var month = now.getMonth();
+      var firstDay = new Date(year, month, 1).getDay();
+      var daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      $monthLabel.textContent = now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+      var monthCount = 0;
+
+      for (var i = 0; i < firstDay; i++) {
+        var empty = document.createElement('div');
+        empty.className = 'day empty';
+        $calendar.appendChild(empty);
+      }
+
+      for (var d = 1; d <= daysInMonth; d++) {
+        var iso = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0');
+        var cell = document.createElement('div');
+        cell.className = 'day';
+
+        var hasEntry = allEntries[iso] && allEntries[iso].trim();
+        if (hasEntry) monthCount++;
+
+        var isToday = iso === today;
+        var isFuture = iso > today;
+
+        if (hasEntry) cell.classList.add('done');
+        if (isToday) cell.classList.add('today');
+        if (isFuture) cell.classList.add('future');
+
+        var numSpan = document.createElement('span');
+        numSpan.className = 'num';
+        numSpan.textContent = d;
+        cell.appendChild(numSpan);
+
+        if (hasEntry) {
+          var tickSpan = document.createElement('span');
+          tickSpan.className = 'tick';
+          tickSpan.textContent = '✓';
+          cell.appendChild(tickSpan);
+        }
+
+        if (!isFuture) {
+          (function(dateStr) {
+            cell.addEventListener('click', 
+            function() { onDayClick(dateStr); });
+          })(iso);
+        }
+
+        $calendar.appendChild(cell);
+      }
+
+      $monthCount.textContent = monthCount + ' this month';
+    }
+
+    function renderStats() {
+      var filled = [];
+      for (var k in allEntries) {
+        if (allEntries[k] && allEntries[k].trim()) filled.push(k);
+      }
+      $totalValue.textContent = filled.length;
+
+      var set = {};
+      for (var i = 0; i < filled.length; i++) set[filled[i]] = true;
+
+      var d = new Date();
+      var dISO = d.toLocaleDateString('en-CA');
+      if (!set[dISO]) {
+        d.setDate(d.getDate() - 1);
+        dISO = d.toLocaleDateString('en-CA');
+      }
+      var streak = 0;
+      while (set[dISO]) {
+        streak++;
+        d.setDate(d.getDate() - 1);
+        dISO = d.toLocaleDateString('en-CA');
+      }
+      $streakValue.textContent = streak;
+    }
+
+    function renderFooter() {
+      $footerBar.innerHTML = '';
+      if (isUnlocked()) {
+        var btn = document.createElement('button');
+        btn.textContent = 'Lock this device';
+        btn.addEventListener('click', function() {
+          clearUnlocked();
+          renderFooter();
+          $panel.innerHTML = '<p class="empty-panel">Click any date to view or edit</p>';
+        });
+        $footerBar.appendChild(btn);
+      }
+    }
+
+    function onDayClick(iso) {
+      var content = allEntries[iso] || '';
+      var isPast = iso < today;
+      var unlocked = isUnlocked();
+
+      var dateObj = new Date(iso + 'T00:00:00');
+      var formatted = dateObj.toLocaleDateString('en-US', {
+        weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+      });
+
+      $panel.innerHTML = '';
+
+      var h = document.createElement('h3');
+      h.textContent = formatted;
+      $panel.appendChild(h);
+
+      // ── Past day: always read-only ───────────
+      if (isPast) {
+        var p = document.createElement('p');
+        p.className = 'past-content';
+        p.textContent = content || 'No entry written on this day.';
+        $panel.appendChild(p);
+
+        if (content) {
+          var lock = document.createElement('div');
+          lock.className = 'lock-badge';
+          lock.textContent = 'Locked';
+          $panel.appendChild(lock);
+        }
+        return;
+      }
+
+      // ── Today, locked: show PIN field directly ──
+      if (!unlocked) {
+        var preview = document.createElement('p');
+        preview.className = 'past-content';
+        preview.style.marginBottom = '1rem';
+        preview.textContent = content || 'Nothing written for today yet.';
+        $panel.appendChild(preview);
+
+        var form = document.createElement('form');
+        form.className = 'pin-form';
+
+        var input = document.createElement('input');
+        input.type = 'password';
+        input.className = 'pin-input';
+        input.placeholder = 'Enter PIN to edit';
+        input.maxLength = 8;
+        input.autocomplete = 'off';
+        input.inputMode = 'numeric';
+        form.appendChild(input);
+
+        var btn = document.createElement('button');
+        btn.type = 'submit';
+        btn.className = 'pin-btn';
+        btn.textContent = 'Unlock';
+        form.appendChild(btn);
+
+        $panel.appendChild(form);
+
+        var hint = document.createElement('p');
+        hint.className = 'pin-hint';
+        hint.textContent = 'Only the owner can edit. Everyone can read.';
+        $panel.appendChild(hint);
+
+        form.addEventListener('submit', function(e) {
+          e.preventDefault();
+          if (input.value === PIN_CODE) {
+            setUnlocked();
+            renderFooter();
+            onDayClick(iso);
+          } else {
+            input.value = '';
+            input.placeholder = 'Wrong PIN — try again';
+            input.style.borderColor = '#ef4444';
+            setTimeout(function() {
+              input.placeholder = 'Enter PIN to edit';
+              input.style.borderColor = '#e2e8f0';
+            }, 1500);
+          }
+        });
+
+        input.focus();
+        return;
+      }
+
+      // ── Today, unlocked: editable textarea ──
+      var ta = document.createElement('textarea');
+      ta.value = content;
+      ta.placeholder = 'What did you work on today?';
+      $panel.appendChild(ta);
+
+      var saveBtn = document.createElement('button');
+      saveBtn.textContent = 'Save Entry';
+      saveBtn.className = 'save-btn';
+      $panel.appendChild(saveBtn);
+
+      var status = document.createElement('span');
+      status.className = 'status';
+      $panel.appendChild(status);
+
+      saveBtn.addEventListener('click', function() {
+        var text = ta.value.trim();
+        if (!text) { status.textContent = 'Write something first'; return; }
+
+        saveBtn.disabled = true;
+        status.textContent = 'Saving...';
+
+        client.from('updates').upsert(
+          { log_date: iso, content: text, updated_at: new Date().toISOString() },
+          { onConflict: 'log_date' }
+        ).then(function(res) {
+          saveBtn.disabled = false;
+          if (res.error) {
+            status.textContent = 'Error: ' + res.error.message;
+            return;
+          }
+          allEntries[iso] = text;
+          status.textContent = 'Saved';
+          renderCalendar();
+          renderStats();
+          setTimeout(function() { status.textContent = ''; }, 2000);
+        });
+      });
+
+      ta.focus();
+    }
+
+        document.addEventListener('visibilitychange', function() {
+      if (document.hidden) return;
+      var newToday = todayISO();
+      if (newToday !== today) {
+        today = newToday;
+        $panel.innerHTML = '<p class="empty-panel">Click any date to view or edit</p>';
+        render();
+      }
+    });
+
+    init();
+  </script>
+
+</body>
+</html>
