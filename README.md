@@ -2,9 +2,7 @@
 
 A modern, responsive personal portfolio built from scratch with pure HTML, CSS, and JavaScript. Features a daily work log powered by Supabase, so I can track my consistency publicly.
 
-🔗 **Live:** [rishitvashista.github.io/portfolio](https://rishitvashista.github.io/portfolio)
-
----
+🔗 **Live:**  https://rishitvashista.github.io/portfolio/
 
 ## ✨ Features
 
